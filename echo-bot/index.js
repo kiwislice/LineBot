@@ -18,21 +18,29 @@ const linebotParser = bot.parser();
 
 app.post('/linewebhook', linebotParser);
 
+const UberPandaRemindService = require('./service/UberPandaRemindService');
+const ErrorCmdService = require('./service/ErrorCmdService');
+const UberPandaOrderService = require('./service/UberPandaOrderService');
+
+const services = [UberPandaRemindService, UberPandaOrderService, ErrorCmdService,];
+services.forEach(elm => elm.bot = bot);
 
 bot.on('message', function (event) {
   console.log(`received message: ${event.message.text}`);
+  var source = JSON.stringify(event.source);
+  console.log(`${source}`);
 
-  setTimeout(() => {
-    bot.push(event.source.userId, `5秒`);
-  }, 5000);
+  var cmd = event.message.text.trim();
+  for (var i = 0; i < services.length; i++) {
+    // 有1個能處理就不需要其他
+    if (services[i].handle(cmd, event, bot))
+      break;
+  }
 
-  event.reply(`重複:` + event.message.text).then(function (data) {
-    // success
-    console.log(`event.reply success ${data}`);
-  }).catch(function (error) {
-    // error
-    console.log(`event.reply error ${error}`);
-  });
+  // setTimeout(() => {
+  //   bot.push(event.source.userId, `5秒`);
+  // }, 5000);
+
 });
 
 const port = process.env.PORT;

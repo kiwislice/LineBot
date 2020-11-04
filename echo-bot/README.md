@@ -2,7 +2,17 @@
 
 An example LINE bot just to echo messages
 
-## How to use
+## 功能
+
+- 排程開關
+- 收集&彙整訊息開始結束
+- echo
+- 計算機
+- 
+
+
+
+
 
 ### Install deps
 
