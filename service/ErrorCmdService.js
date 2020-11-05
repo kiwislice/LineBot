@@ -10,7 +10,7 @@ function needHelp(cmd) {
 }
 
 service.handle = function (cmd, event) {
-    if (needHelp('bot')) {
+    if (needHelp(cmd)) {
         event.reply(msg);
     }
 };
