@@ -2,7 +2,7 @@
 var service = {};
 
 const msg = `bot使用說明請見此連結：
-https://github.com/kiwislice/LineBot/blob/master/echo-bot/README.md
+https://github.com/kiwislice/LineBot/blob/master/README.md
 `;
 
 function needHelp(cmd) {
