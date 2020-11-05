@@ -4,6 +4,7 @@ var service = { bot: null };
 const SERVICE_ID = `UberPandaRemindService`;
 const schedule = require('node-schedule');
 const repository = require('./Repository');
+const tools = require('./Tools');
 
 var cache = {};
 
@@ -20,18 +21,8 @@ repository.getSubscribedUserId({ service_id: SERVICE_ID }, (response) => {
     });
 });
 
-function getSourrceId(event) {
-    if (event.source.type == 'user')
-        return event.source.userId;
-    if (event.source.type == 'group')
-        return event.source.groupId;
-    if (event.source.type == 'room')
-        return event.source.roomId;
-    return null;
-}
-
 service.handle = function (cmd, event, bot) {
-    var sourceId = getSourrceId(event);
+    var sourceId = tools.getSourceId(event);
     if (sourceId == null)
         return false;
     if (cmd === "開啟訂餐通知") {

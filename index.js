@@ -37,16 +37,14 @@ bot.on('message', function (event) {
       break;
   }
 
-  // setTimeout(() => {
-  //   bot.push(event.source.userId, `5秒`);
-  // }, 5000);
-
 });
 
-console.log(`channelId=${process.env.CHANNEL_ID}
-channelSecret=${process.env.CHANNEL_SECRET}
-channelAccessToken=${process.env.CHANNEL_ACCESS_TOKEN}
-port=${process.env.PORT}`);
+console.log(`
+  channelId=${process.env.CHANNEL_ID}
+  channelSecret=${process.env.CHANNEL_SECRET}
+  channelAccessToken=${process.env.CHANNEL_ACCESS_TOKEN}
+  port=${process.env.PORT}
+`);
 
 const port = process.env.PORT;
 app.listen(port, () => {
