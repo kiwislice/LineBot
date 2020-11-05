@@ -21,19 +21,19 @@ app.post('/linewebhook', linebotParser);
 const UberPandaRemindService = require('./service/UberPandaRemindService');
 const ErrorCmdService = require('./service/ErrorCmdService');
 const UberPandaOrderService = require('./service/UberPandaOrderService');
-
-const services = [UberPandaRemindService, UberPandaOrderService, ErrorCmdService,];
+const ImsScheduleService = require('./service/ImsScheduleService');
+const services = [UberPandaRemindService, UberPandaOrderService, ImsScheduleService,ErrorCmdService];
 services.forEach(elm => elm.bot = bot);
 
-bot.on('message', function (event) {
+bot.on('message',async function (event) {
   console.log(`received message: ${event.message.text}`);
   var source = JSON.stringify(event.source);
   console.log(`${source}`);
-
+  
   var cmd = event.message.text.trim();
   for (var i = 0; i < services.length; i++) {
     // 有1個能處理就不需要其他
-    if (services[i].handle(cmd, event, bot))
+    if (await services[i].handle(cmd, event, bot))
       break;
   }
 
