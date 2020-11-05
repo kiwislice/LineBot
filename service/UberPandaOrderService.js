@@ -14,7 +14,7 @@ service.handle = async function (cmd, event, bot) {
         cache[sourceId] = { enable: true, list: {} };
         event.reply(`以下開放點餐`);
         return true;
-    } else if (cmd === "結束點餐") {
+    } else if (cache[sourceId] && cmd === "結束點餐") {
         cache[sourceId].enable = false;
         event.reply(`點餐截止`);
         return true;

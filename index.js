@@ -28,8 +28,8 @@ app.post('/linewebhook', linebotParser);
 const UberPandaRemindService = require('./service/UberPandaRemindService');
 const ErrorCmdService = require('./service/ErrorCmdService');
 const UberPandaOrderService = require('./service/UberPandaOrderService');
-
-const services = [UberPandaRemindService, UberPandaOrderService, ErrorCmdService,];
+const ImsScheduleService = require('./service/ImsScheduleService');
+const services = [UberPandaRemindService, UberPandaOrderService, ImsScheduleService, ErrorCmdService];
 services.forEach(elm => elm.bot = bot);
 
 bot.on('message', async function (event) {
