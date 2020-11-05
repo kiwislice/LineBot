@@ -14,7 +14,7 @@ repository.getSubscribedUserId({ service_id: SERVICE_ID }, (response) => {
     var list = response.data.data.linebot_subscribed;
     list.forEach((elm) => {
         cache[elm.user_id.toString()] = schedule.scheduleJob(JOB_SETTING, function () {
-            service.bot?.push(elm.user_id, `今天要訂外送嗎？`);
+            service.bot.push(elm.user_id, `今天要訂外送嗎？`);
         });
         console.log(`UberPandaRemindService add cache ${elm.user_id}`);
     });
@@ -43,7 +43,7 @@ service.handle = function (cmd, event, bot) {
         return true;
     } else if (cmd === "關閉訂餐通知") {
         repository.deleteSubscribedUserId({ service_id: SERVICE_ID, user_id: sourceId });
-        cache[sourceId]?.cancel();
+        cache[sourceId].cancel();
         bot.push(sourceId, `已關閉訂餐通知`);
         return true;
     }

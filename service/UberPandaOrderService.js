@@ -18,7 +18,7 @@ service.handle = async function (cmd, event, bot) {
         cache[sourceId].enable = false;
         event.reply(`點餐截止`);
         return true;
-    } else if (cache[sourceId]?.enable && cmd.startsWith("/")) {
+    } else if (cache[sourceId].enable && cmd.startsWith("/")) {
         var data = cache[sourceId].list[event.source.userId] || {};
         var item = cmd.replace(/^\/+/, '');
         data.item = item;
@@ -26,7 +26,7 @@ service.handle = async function (cmd, event, bot) {
         cache[sourceId].list[event.source.userId] = data;
         event.reply(`接受點餐：${data.username} ${data.item}`);
         return true;
-    } else if (cache[sourceId]?.enable && cmd === "清單") {
+    } else if (cache[sourceId].enable && cmd === "清單") {
         var list = cache[sourceId].list;
         var msg = `已接受清單：\n`;
         for (var userId in list) {
