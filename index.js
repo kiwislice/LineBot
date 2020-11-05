@@ -4,6 +4,13 @@ require('dotenv').config();
 const express = require('express');
 const linebot = require('linebot');
 
+console.log(`
+  channelId=${process.env.CHANNEL_ID}
+  channelSecret=${process.env.CHANNEL_SECRET}
+  channelAccessToken=${process.env.CHANNEL_ACCESS_TOKEN}
+  port=${process.env.PORT}
+`);
+
 var bot = linebot({
   channelId: process.env.CHANNEL_ID,
   channelSecret: process.env.CHANNEL_SECRET,
@@ -38,13 +45,6 @@ bot.on('message', function (event) {
   }
 
 });
-
-console.log(`
-  channelId=${process.env.CHANNEL_ID}
-  channelSecret=${process.env.CHANNEL_SECRET}
-  channelAccessToken=${process.env.CHANNEL_ACCESS_TOKEN}
-  port=${process.env.PORT}
-`);
 
 const port = process.env.PORT;
 app.listen(port, () => {
