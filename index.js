@@ -32,7 +32,7 @@ const UberPandaOrderService = require('./service/UberPandaOrderService');
 const services = [UberPandaRemindService, UberPandaOrderService, ErrorCmdService,];
 services.forEach(elm => elm.bot = bot);
 
-bot.on('message', function (event) {
+bot.on('message', async function (event) {
   console.log(`received message: ${event.message.text}`);
   var source = JSON.stringify(event.source);
   console.log(`${source}`);
@@ -40,7 +40,7 @@ bot.on('message', function (event) {
   var cmd = event.message.text.trim();
   for (var i = 0; i < services.length; i++) {
     // 有1個能處理就不需要其他
-    if (services[i].handle(cmd, event, bot))
+    if (await services[i].handle(cmd, event, bot))
       break;
   }
 
