@@ -8,7 +8,7 @@ const tools = require('./Tools');
 
 var cache = {};
 
-const JOB_SETTING = '0 50 10 * * 1-5';
+const JOB_SETTING = '0 56 10 * * 1-5';
 // const JOB_SETTING = '0 * * * * 1-5';
 
 // 啟動時自動觸發排程
