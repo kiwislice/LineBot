@@ -8,8 +8,8 @@ const schedule = require("node-schedule");
 const axios = require('axios');
 
 var cache = {};
-const JOB_SETTING = '15 17 * * 1-5';
-// const JOB_SETTING = '* * * * 1-5';
+const JOB_SETTING = '0 15 17 * * 1-5';
+// const JOB_SETTING = '0 * * * * 1-5';
 
 // 啟動時自動觸發排程
 repository.getSubscribedUserId({ service_id: SERVICE_ID }, (response) => {

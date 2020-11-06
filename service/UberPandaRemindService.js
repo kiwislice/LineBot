@@ -8,7 +8,8 @@ const tools = require('./Tools');
 
 var cache = {};
 
-const JOB_SETTING = { hour: 9, minute: 40, second: 0 };
+const JOB_SETTING = '0 50 10 * * 1-5';
+// const JOB_SETTING = '0 * * * * 1-5';
 
 // 啟動時自動觸發排程
 repository.getSubscribedUserId({ service_id: SERVICE_ID }, (response) => {
@@ -17,7 +18,7 @@ repository.getSubscribedUserId({ service_id: SERVICE_ID }, (response) => {
         cache[elm.user_id] = schedule.scheduleJob(JOB_SETTING, function () {
             service.bot.push(elm.user_id, `今天要訂外送嗎？`);
         });
-        console.log(`UberPandaRemindService add cache ${elm.user_id}`);
+        console.log(`${SERVICE_ID} add cache ${elm.user_id}`);
     });
 });
 
