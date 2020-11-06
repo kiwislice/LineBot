@@ -34,9 +34,30 @@ async function getUserName(event) {
   return result.displayName;
 }
 
+async function leaveRoom(event) {
+  var url = null;
+  if (event.source.type == 'group') {
+    url = `https://api.line.me/v2/bot/group/{groupId}/leave`;
+    url = url.replace('{groupId}', event.source.groupId);
+  }
+  else if (event.source.type == 'room') {
+    url = `https://api.line.me/v2/bot/room/{roomId}/leave`;
+    url = url.replace('{roomId}', event.source.roomId);
+  }
+  else return;
+
+  await axios({
+    method: 'post',
+    url: url,
+    headers: { 'Authorization': 'Bearer ' + process.env.CHANNEL_ACCESS_TOKEN },
+  }).then(function (response) {
+    console.log(response);
+  });
+}
+
 
 module.exports = {
-  getSourceId, getUserName,
+  getSourceId, getUserName, leaveRoom,
 };
 
 

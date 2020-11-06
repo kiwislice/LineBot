@@ -30,8 +30,10 @@ const ErrorCmdService = require('./service/ErrorCmdService');
 const UberPandaOrderService = require('./service/UberPandaOrderService');
 const ImsScheduleService = require('./service/ImsScheduleService');
 const AqiScheduleService = require('./service/AqiScheduleService');
+const LeaveRoomService = require('./service/LeaveRoomService');
 
-const services = [UberPandaRemindService, UberPandaOrderService, ImsScheduleService, AqiScheduleService, ErrorCmdService];
+const services = [UberPandaRemindService, UberPandaOrderService, ImsScheduleService,
+  AqiScheduleService, LeaveRoomService, ErrorCmdService];
 services.forEach(elm => elm.bot = bot);
 
 bot.on('message', async function (event) {
