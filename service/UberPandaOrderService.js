@@ -12,7 +12,7 @@ service.handle = async function (cmd, event, bot) {
         return false;
     if (cmd === "開始點餐") {
         cache[sourceId] = { enable: true, list: {} };
-        event.reply(`以下開放點餐`);
+        event.reply(`以下開放點餐，餐點名稱前面請加/\n範例：/雞肉飯`);
         return true;
     } else if (cache[sourceId] && cmd === "結束點餐") {
         cache[sourceId].enable = false;
@@ -26,7 +26,7 @@ service.handle = async function (cmd, event, bot) {
         cache[sourceId].list[event.source.userId] = data;
         event.reply(`接受點餐：${data.username} ${data.item}`);
         return true;
-    } else if (cache[sourceId] && cache[sourceId].enable && cmd === "清單") {
+    } else if (cache[sourceId] && cmd === "清單") {
         var list = cache[sourceId].list;
         var msg = `已接受清單：\n`;
         for (var userId in list) {

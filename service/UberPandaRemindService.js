@@ -16,7 +16,7 @@ repository.getSubscribedUserId({ service_id: SERVICE_ID }, (response) => {
     var list = response.data.data.linebot_subscribed;
     list.forEach((elm) => {
         cache[elm.user_id] = schedule.scheduleJob(JOB_SETTING, function () {
-            service.bot.push(elm.user_id, `今天要訂外送嗎？`);
+            service.bot.push(elm.user_id, `今天要訂外送嗎？\nhttps://kiwislice.github.io/UberPanda/#/`);
         });
         console.log(`${SERVICE_ID} add cache ${elm.user_id}`);
     });
