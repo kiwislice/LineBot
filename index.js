@@ -50,6 +50,14 @@ bot.on('message', async function (event) {
 
 });
 
+
+// 額外加上根目錄的GET
+app.get("/", function (req, res) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.send(`empty home`);
+});
+
+
 const port = process.env.PORT;
 app.listen(port, () => {
   console.log(`listening on ${port}`);

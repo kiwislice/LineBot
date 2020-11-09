@@ -1,3 +1,2 @@
-web: node web.js
+web: node index.js
 wakeup: node wakeup.js
-linebot: node index.js
