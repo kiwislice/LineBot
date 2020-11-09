@@ -8,8 +8,9 @@ app.get("/", function (req, res) {
   res.send(`empty home`);
 });
 
-app.listen(80, function () {
-  console.log("web.js listening on port 80");
+const port = process.env.PORT;
+app.listen(port, function () {
+  console.log(`web.js listening on port ${port}`);
 });
 
 
