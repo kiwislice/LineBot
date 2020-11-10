@@ -2,8 +2,8 @@ var service = { bot: null };
 
 const SERVICE_ID = `AqiScheduleService`;
 
-const tools = require("./Tools");
-const repository = require("./Repository");
+const repository = require('../service/Repository');
+const tools = require('../service/Tools');
 const schedule = require("node-schedule");
 const axios = require('axios');
 

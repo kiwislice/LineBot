@@ -1,8 +1,8 @@
 var service = { bot: null };
 
 const SERVICE_ID = `ImsScheduleService`;
-const tools = require("./Tools");
-const repository = require("./Repository");
+const repository = require('../service/Repository');
+const tools = require('../service/Tools');
 const schedule = require("node-schedule");
 var cache = {};
 const JOB_SETTING = '00 10 24-31 * 1-5';

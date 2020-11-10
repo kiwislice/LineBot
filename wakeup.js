@@ -4,7 +4,7 @@ const schedule = require('node-schedule');
 const axios = require('axios');
 
 // const JOB_SETTING = '0 30 10 * * 1-5';
-const JOB_SETTING = '0 0,20,40 8-18 * * 1-5';
+const JOB_SETTING = '0 10,30,50 8-17 * * 1-5';
 
 
 function wakeup() {

@@ -3,8 +3,8 @@ var service = { bot: null };
 
 const SERVICE_ID = `UberPandaRemindService`;
 const schedule = require('node-schedule');
-const repository = require('./Repository');
-const tools = require('./Tools');
+const repository = require('../service/Repository');
+const tools = require('../service/Tools');
 
 var cache = {};
 

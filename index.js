@@ -25,15 +25,16 @@ const linebotParser = bot.parser();
 
 app.post('/linewebhook', linebotParser);
 
-const UberPandaRemindService = require('./service/UberPandaRemindService');
-const ErrorCmdService = require('./service/ErrorCmdService');
-const UberPandaOrderService = require('./service/UberPandaOrderService');
-const ImsScheduleService = require('./service/ImsScheduleService');
-const AqiScheduleService = require('./service/AqiScheduleService');
-const LeaveRoomService = require('./service/LeaveRoomService');
+const UberPandaRemindService = require('./linebot/UberPandaRemindService');
+const ErrorCmdService = require('./linebot/ErrorCmdService');
+const UberPandaOrderService = require('./linebot/UberPandaOrderService');
+const ImsScheduleService = require('./linebot/ImsScheduleService');
+const AqiScheduleService = require('./linebot/AqiScheduleService');
+const LeaveRoomService = require('./linebot/LeaveRoomService');
+const ReplyService = require('./linebot/ReplyService');
 
 const services = [UberPandaRemindService, UberPandaOrderService, ImsScheduleService,
-  AqiScheduleService, LeaveRoomService, ErrorCmdService];
+  AqiScheduleService, LeaveRoomService, ReplyService, ErrorCmdService];
 services.forEach(elm => elm.bot = bot);
 
 bot.on('message', async function (event) {

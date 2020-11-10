@@ -2,7 +2,7 @@
 var service = { bot: null };
 
 const SERVICE_ID = `UberPandaOrderService`;
-const tools = require('./Tools');
+const tools = require('../service/Tools');
 
 var cache = {};
 
