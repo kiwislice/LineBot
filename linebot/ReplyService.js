@@ -41,6 +41,7 @@ service.handle = function (cmd, event, bot) {
         var elm = cache[i];
         if (replyMap[elm.text] != undefined) {
             bot.push(elm.sid, replyMap[elm.text]);
+            cache.splice(i, 1);
             return true;
         }
     }
