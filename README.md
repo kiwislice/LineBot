@@ -51,6 +51,8 @@
 
 ```javascript
 reply:目標訊息;要回覆的訊息    // 只紀錄最近5筆訊息
+reply clear all              // 清除所有回覆訊息Map
+reply clear xxx              // 清除指定回覆訊息Map
 ```
 
 

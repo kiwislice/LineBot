@@ -24,7 +24,23 @@ function tryParseReplyCmd(cmd) {
     return false;
 }
 
+function tryClearReplyMap(cmd) {
+    // reply clear xxx
+    var ar = cmd.match(/^reply clear (.+)/);
+    if (ar) {
+        if (ar[1] == 'all')
+            replyMap = {};
+        else if (replyMap[ar[1]])
+            delete replyMap[ar[1]];
+        return true;
+    }
+    return false;
+}
+
 service.handle = function (cmd, event, bot) {
+    if (tryClearReplyMap(cmd))
+        return true;
+
     var isReplyCmd = tryParseReplyCmd(cmd);
     console.log(replyMap);
 
