@@ -8,7 +8,7 @@ const schedule = require("node-schedule");
 const axios = require('axios');
 
 var cache = {};
-const JOB_SETTING = '0 15 17 * * 1-5';
+const JOB_SETTING = '0 20 17 * * 1-5';
 // const JOB_SETTING = '0 * * * * 1-5';
 
 // 啟動時自動觸發排程
@@ -56,7 +56,7 @@ repository.getSubscribedUserId({ service_id: SERVICE_ID }, (response) => {
   }
  */
 async function getAqiData() {
-  const API_URL = 'https://data.epa.gov.tw/api/v1/aqx_p_432?limit=1000&api_key=9be7b239-557b-4c10-9775-78cadfc555e9&format=json';
+  const API_URL = 'https://data.epa.gov.tw/api/v1/aqx_p_432?limit=1000&api_key=c729d412-9be4-4dd5-9671-522d47d3a49f&format=json';
 
   var data = null;
   await axios.get(API_URL).then(function (response) {
