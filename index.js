@@ -52,12 +52,13 @@ bot.on('message', async function (event) {
 });
 
 
-// 額外加上根目錄的GET
-app.get("/", function (req, res) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.send(`empty home`);
-});
+const CookieFilter = require('./web/CookieFilter');
+const CrosFilter = require('./web/CrosFilter');
+const HomeRouter = require('./web/HomeRouter');
 
+
+// 額外加上根目錄的GET
+app.use("/", CookieFilter, CrosFilter, HomeRouter);
 
 const port = process.env.PORT;
 app.listen(port, () => {
