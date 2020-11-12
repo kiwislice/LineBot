@@ -6,7 +6,7 @@ const tools = require('../service/Tools');
 
 var cache = {};
 
-service.handle = async function (cmd, event, bot) {
+service.handle = async function (cmd, event) {
     var sourceId = tools.getSourceId(event);
     if (sourceId == null)
         return false;

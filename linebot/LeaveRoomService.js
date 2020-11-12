@@ -4,7 +4,7 @@ const SERVICE_ID = `LeaveRoomService`;
 
 const tools = require('../service/Tools');
 
-service.handle = async function (cmd, event, bot) {
+service.handle = async function (cmd, event) {
   var sourceId = tools.getSourceId(event);
   if (sourceId == null) return false;
 

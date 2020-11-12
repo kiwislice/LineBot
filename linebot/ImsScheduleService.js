@@ -11,9 +11,9 @@ repository.getSubscribedUserId({ service_id: SERVICE_ID }, (response) => {
   var list = response.data.data.linebot_subscribed;
   list.forEach((elm) => {
     cache[elm.user_id] = function () {
-      bot.push(elm.user_id, `已啟動IMS回報`);
+      service.bot.push(elm.user_id, `已啟動IMS回報`);
       schedule.scheduleJob(JOB_SETTING, function () {
-        bot.push(
+        service.bot.push(
           elm.user_id,
           `今天是本月最後一個工作天,請各位記得上IMS回報每月工時.`
         );
@@ -24,7 +24,7 @@ repository.getSubscribedUserId({ service_id: SERVICE_ID }, (response) => {
   });
 });
 
-service.handle = function (cmd, event, bot) {
+service.handle = function (cmd, event) {
   var sourceId = tools.getSourceId(event);
   if (sourceId == null) return false;
   if (cmd === "啟動IMS回報") {
@@ -33,9 +33,9 @@ service.handle = function (cmd, event, bot) {
       user_id: sourceId,
     });
     cache[sourceId] = function () {
-      bot.push(sourceId, `已啟動IMS回報`);
+      event.reply(sourceId, `已啟動IMS回報`);
       schedule.scheduleJob(JOB_SETTING, function () {
-        bot.push(
+        service.bot.push(
           sourceId,
           `今天是本月最後一個工作天,請各位記得上IMS回報每月工時.`
         );
@@ -50,7 +50,7 @@ service.handle = function (cmd, event, bot) {
       user_id: sourceId,
     });
     cache[sourceId] = function () { };
-    bot.push(sourceId, `已關閉IMS回報`);
+    event.reply(sourceId, `已關閉IMS回報`);
     return true;
   }
   return false;

@@ -37,7 +37,7 @@ function tryClearReplyMap(cmd) {
     return false;
 }
 
-service.handle = function (cmd, event, bot) {
+service.handle = function (cmd, event) {
     if (tryClearReplyMap(cmd))
         return true;
 
@@ -56,7 +56,7 @@ service.handle = function (cmd, event, bot) {
     for (let i = cache.length - 1; i >= 0; i--) {
         var elm = cache[i];
         if (replyMap[elm.text] != undefined) {
-            bot.push(elm.sid, replyMap[elm.text]);
+            service.bot.push(elm.sid, replyMap[elm.text]);
             cache.splice(i, 1);
             return true;
         }

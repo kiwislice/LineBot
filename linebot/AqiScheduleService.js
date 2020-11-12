@@ -77,7 +77,7 @@ https://airtw.epa.gov.tw/CHT/EnvMonitoring/Central/CentralMonitoring.aspx
 }
 
 
-service.handle = function (cmd, event, bot) {
+service.handle = function (cmd, event) {
   var sourceId = tools.getSourceId(event);
   if (sourceId == null) return false;
 
@@ -89,7 +89,7 @@ service.handle = function (cmd, event, bot) {
     if (!cache[sourceId]) {
       cache[sourceId] = schedule.scheduleJob(JOB_SETTING, async function () {
         var msg = await getAqiMsg();
-        bot.push(sourceId, msg);
+        service.bot.push(sourceId, msg);
       });
       event.reply(`已開啟空氣品質通知`);
     }

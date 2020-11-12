@@ -41,7 +41,7 @@ function startRemind(sourceId) {
     }, 20 * 60 * 1000);
 }
 
-service.handle = function (cmd, event, bot) {
+service.handle = function (cmd, event) {
     var sourceId = tools.getSourceId(event);
 
     if (sourceId == null)
@@ -51,12 +51,12 @@ service.handle = function (cmd, event, bot) {
         jobs[sourceId] = schedule.scheduleJob(JOB_SETTING, function () {
             startRemind(sourceId);
         });
-        bot.push(sourceId, `已開啟訂餐通知`);
+        event.reply(sourceId, `已開啟訂餐通知`);
         return true;
     } else if (cmd === "關閉訂餐通知") {
         repository.deleteSubscribedUserId({ service_id: SERVICE_ID, user_id: sourceId });
         jobs[sourceId] && jobs[sourceId].cancel();
-        bot.push(sourceId, `已關閉訂餐通知`);
+        event.reply(sourceId, `已關閉訂餐通知`);
         return true;
     } else if (cache[sourceId] && cache[sourceId].enable && cmd.indexOf('+1') >= 0) {
         cache[sourceId].ids[event.source.userId] = 1;
