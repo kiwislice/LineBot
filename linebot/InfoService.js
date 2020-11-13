@@ -1,4 +1,7 @@
 
+
+// bot狀態相關服務
+
 var service = { bot: null };
 
 const tools = require('../service/Tools');

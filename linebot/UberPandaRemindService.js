@@ -52,7 +52,7 @@ function getCount(sourceId) {
     return count;
 }
 
-service.handle = function (cmd, event) {
+service.handle = async function (cmd, event) {
     var sourceId = tools.getSourceId(event);
 
     if (sourceId == null)
@@ -77,6 +77,11 @@ service.handle = function (cmd, event) {
             cache[sourceId].enable = false;
             event.reply(`+1人數已滿${PEOPLE_LOWER_BOUND}人，快決定店家點餐吧`);
         }
+        return true;
+    } else if (cmd.indexOf("要吃什麼") >= 0) {
+        var stores = await repository.randomStores(3);
+        var msg = stores.map(x => `${x.name}\n${x.url}\n\n`).reduce((a, b) => a + b);
+        event.reply(msg);
         return true;
     }
     return false;
