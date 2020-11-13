@@ -37,32 +37,6 @@ function createBot(setting) {
 }
 
 
-function botWrap(bot) {
-  console.log(`
-    bot.channelId=${bot.options.channelId}
-    bot.channelSecret=${bot.options.channelSecret}
-    bot.channelAccessToken=${bot.options.channelAccessToken}
-  `);
-
-  bot.options.channelAccessToken = 'aaa';
-  bot.headers = {
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-    Authorization: 'Bearer ' + bot.options.channelAccessToken
-  };
-
-  console.log(`
-    bot.channelId=${bot.options.channelId}
-    bot.channelSecret=${bot.options.channelSecret}
-    bot.channelAccessToken=${bot.options.channelAccessToken}
-  `);
-
-  return bot;
-}
-
-
-
-
 // 直接讀取所有環境變數建立bots
 var settings = readEnvSettings();
 var bots = settings.map(setting => createBot(setting));
@@ -96,11 +70,14 @@ async function botOnMessage(event) {
   var source = JSON.stringify(event.source);
   console.log(`${source}`);
 
-  var cmd = event.message.text.trim();
-  for (var i = 0; i < services.length; i++) {
-    // 有1個能處理就不需要其他
-    if (await services[i].handle(cmd, event))
-      break;
+  // 貼圖text會是undefined
+  if (event.message.text) {
+    var cmd = event.message.text.trim();
+    for (var i = 0; i < services.length; i++) {
+      // 有1個能處理就不需要其他
+      if (await services[i].handle(cmd, event))
+        break;
+    }
   }
 }
 

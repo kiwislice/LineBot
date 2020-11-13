@@ -33,7 +33,7 @@ service.handle = function (cmd, event) {
       user_id: sourceId,
     });
     cache[sourceId] = function () {
-      event.reply(sourceId, `已啟動IMS回報`);
+      event.reply(`已啟動IMS回報`);
       schedule.scheduleJob(JOB_SETTING, function () {
         service.bot.push(
           sourceId,
@@ -50,7 +50,7 @@ service.handle = function (cmd, event) {
       user_id: sourceId,
     });
     cache[sourceId] = function () { };
-    event.reply(sourceId, `已關閉IMS回報`);
+    event.reply(`已關閉IMS回報`);
     return true;
   }
   return false;

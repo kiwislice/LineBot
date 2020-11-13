@@ -10,8 +10,8 @@ const LinebotHelper = require('./service/LinebotHelper');
 // about Express itself: https://expressjs.com/
 const app = express();
 
+// linebot啟動過程都移至LinebotHelper
 LinebotHelper(app);
-
 
 
 const CookieFilter = require('./web/CookieFilter');
@@ -26,5 +26,9 @@ const port = process.env.PORT;
 app.listen(port, () => {
   console.log(`listening on ${port}`);
 });
+
+// 啟動防止heroku休眠
+const wakeup = require('./wakeup');
+
 
 
