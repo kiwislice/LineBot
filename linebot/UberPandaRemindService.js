@@ -78,9 +78,6 @@ service.handle = function (cmd, event) {
             event.reply(`+1人數已滿${PEOPLE_LOWER_BOUND}人，快決定店家點餐吧`);
         }
         return true;
-    } else if (cmd === "a") {
-        startRemind(sourceId);
-        return true;
     }
     return false;
 };
