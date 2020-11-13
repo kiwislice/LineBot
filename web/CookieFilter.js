@@ -1,5 +1,5 @@
 
-const SERVICE_ID = `CrosFilter`;
+const SERVICE_ID = `CookieFilter`;
 
 const repository = require('../service/Repository');
 

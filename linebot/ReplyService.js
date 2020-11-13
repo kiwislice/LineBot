@@ -46,7 +46,9 @@ service.handle = function (cmd, event) {
 
     if (!isReplyCmd) {
         var sourceId = tools.getSourceId(event);
-        cache.push({ sid: sourceId, text: cmd });
+        var exist = cache.findIndex(x => x.sid == sourceId && x.text == cmd) >= 0;
+        if (!exist)
+            cache.push({ sid: sourceId, text: cmd });
         while (cache.length > 5) {
             cache.shift();
         }

@@ -57,10 +57,13 @@ const AqiScheduleService = require('../linebot/AqiScheduleService');
 const LeaveRoomService = require('../linebot/LeaveRoomService');
 const ReplyService = require('../linebot/ReplyService');
 const TestScheduleService = require('../linebot/TestScheduleService');
+const InfoService = require('../linebot/InfoService');
+
+
 
 
 const services = [UberPandaRemindService, UberPandaOrderService, ImsScheduleService,
-  AqiScheduleService, LeaveRoomService, ReplyService, TestScheduleService, ErrorCmdService];
+  AqiScheduleService, LeaveRoomService, ReplyService, TestScheduleService, InfoService, ErrorCmdService];
 // 原本塞給各服務的bot改為代理
 services.forEach(elm => elm.bot = botProxy);
 
@@ -87,6 +90,7 @@ module.exports = function (app) {
     bot.on('message', botOnMessage);
     var linebotParser = bot.parser();
     app.post(bot.linewebhookPath, linebotParser);
+
   });
 };
 

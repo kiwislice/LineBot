@@ -55,9 +55,40 @@ async function leaveRoom(event) {
   });
 }
 
+async function getBotName(bot) {
+  const url = `https://api.line.me/v2/bot/info`;
+  var result = {};
+  await axios({
+    method: 'get',
+    url: url,
+    headers: { 'Authorization': 'Bearer ' + bot.options.channelAccessToken },
+  }).then(function (response) {
+    result = response.data;
+  });
+  return result.displayName;
+}
+
+async function getBotPushCount(bot) {
+  const url = `https://api.line.me/v2/bot/message/delivery/push`;
+  var result = {};
+  await axios({
+    method: 'get',
+    url: `${url}?date=${yesterday()}`,
+    headers: { 'Authorization': 'Bearer ' + bot.options.channelAccessToken },
+  }).then(function (response) {
+    result = response.data;
+  });
+  return result.success;
+}
+
+function yesterday() {
+  const MS_OF_DAY = 1000 * 60 * 60 * 24;
+  var d = new Date(Date.now() - MS_OF_DAY);
+  return `${d.getFullYear()}${d.getMonth() + 1}${d.getDate()}`;
+}
 
 module.exports = {
-  getSourceId, getUserName, leaveRoom,
+  getSourceId, getUserName, leaveRoom, getBotName, getBotPushCount,
 };
 
 
