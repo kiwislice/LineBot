@@ -52,6 +52,12 @@ function getCount(sourceId) {
     return count;
 }
 
+async function randomStoresMsg(n) {
+    var stores = await repository.randomStores(n);
+    var msg = stores.map(x => `${x.name}\n${x.url}\n\n`).reduce((a, b) => a + b);
+    return msg;
+}
+
 service.handle = async function (cmd, event) {
     var sourceId = tools.getSourceId(event);
 
@@ -75,13 +81,14 @@ service.handle = async function (cmd, event) {
         if (count >= PEOPLE_LOWER_BOUND) {
             clearTimeout(cache[sourceId].timeout);
             cache[sourceId].enable = false;
-            event.reply(`+1人數已滿${PEOPLE_LOWER_BOUND}人，快決定店家點餐吧`);
+            var msg = `+1人數已滿${PEOPLE_LOWER_BOUND}人，快決定店家點餐吧\n以下為本次助理推薦店家：\n`;
+            msg += await randomStoresMsg(3);
+            event.reply(msg);
         }
         return true;
     } else if (cmd.indexOf("要吃什麼") >= 0) {
-        var stores = await repository.randomStores(3);
-        var msg = stores.map(x => `${x.name}\n${x.url}\n\n`).reduce((a, b) => a + b);
-        event.reply(msg);
+        var storesMsg = await randomStoresMsg(3);
+        event.reply(storesMsg);
         return true;
     }
     return false;
