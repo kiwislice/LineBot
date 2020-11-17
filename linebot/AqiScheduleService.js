@@ -6,6 +6,7 @@ const repository = require('../service/Repository');
 const tools = require('../service/Tools');
 const schedule = require("node-schedule");
 const axios = require('axios');
+const card = require('../service/FlexMeaaageRandemCard');
 
 var cache = {};
 const JOB_SETTING = '0 20 17 * * 1-5';
@@ -67,17 +68,11 @@ async function getAqiData() {
 
 async function getAqiMsg() {
   var data = await getAqiData();
-  return `左營站空氣品質即時監測資料：
-資料時間：${data.PublishTime}, 
-空氣品質指標 AQI：${data.AQI}(${data.Status}),
-PM2.5：${data['PM2.5']},
-資料來源：環保署空氣品質監測網
-https://airtw.epa.gov.tw/CHT/EnvMonitoring/Central/CentralMonitoring.aspx
-  `;
+  return card.getAqiCard(data);
 }
 
 
-service.handle = function (cmd, event) {
+service.handle = async function (cmd, event) {
   var sourceId = tools.getSourceId(event);
   if (sourceId == null) return false;
 
