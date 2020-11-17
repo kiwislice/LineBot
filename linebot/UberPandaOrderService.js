@@ -6,7 +6,7 @@ const tools = require('../service/Tools');
 
 var cache = {};
 
-service.handle = async function (cmd, event) {
+service.handle = async function (cmd, event, currentBot) {
     var sourceId = tools.getSourceId(event);
     if (sourceId == null)
         return false;
@@ -22,7 +22,7 @@ service.handle = async function (cmd, event) {
         var data = cache[sourceId].list[event.source.userId] || {};
         var item = cmd.replace(/^\/+/, '');
         data.item = item;
-        data.username = data.username || await tools.getUserName(event);
+        data.username = data.username || await tools.getUserName(event, currentBot);
         cache[sourceId].list[event.source.userId] = data;
         event.reply(`接受點餐：${data.username} ${data.item}`);
         return true;

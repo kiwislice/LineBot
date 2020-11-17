@@ -67,9 +67,15 @@ const services = [UberPandaRemindService, UberPandaOrderService, ImsScheduleServ
 // 原本塞給各服務的bot改為代理
 services.forEach(elm => elm.bot = botProxy);
 
+/**bot OnMessage function工廠 */
+function botOnMessageFactory(bot) {
+  return function (event) {
+    botOnMessage(event, bot);
+  };
+}
 
-async function botOnMessage(event) {
-  console.log(`received message: ${event.message.text}`);
+async function botOnMessage(event, bot) {
+  console.log(`${bot.linewebhookPath} received message: ${event.message.text}`);
   var source = JSON.stringify(event.source);
   console.log(`${source}`);
 
@@ -78,7 +84,7 @@ async function botOnMessage(event) {
     var cmd = event.message.text.trim();
     for (var i = 0; i < services.length; i++) {
       // 有1個能處理就不需要其他
-      if (await services[i].handle(cmd, event))
+      if (await services[i].handle(cmd, event, bot))
         break;
     }
   }
@@ -87,7 +93,7 @@ async function botOnMessage(event) {
 
 module.exports = function (app) {
   bots.forEach(bot => {
-    bot.on('message', botOnMessage);
+    bot.on('message', botOnMessageFactory(bot));
     var linebotParser = bot.parser();
     app.post(bot.linewebhookPath, linebotParser);
 

@@ -11,7 +11,7 @@ function getSourceId(event) {
   return null;
 }
 
-async function getUserName(event) {
+async function getUserName(event, bot) {
   var result = {};
   var url = `https://api.line.me/v2/bot/profile/{userId}`;
   if (event.source.type == 'group') {
@@ -27,14 +27,14 @@ async function getUserName(event) {
   await axios({
     method: 'get',
     url: url,
-    headers: { 'Authorization': 'Bearer ' + process.env.CHANNEL_ACCESS_TOKEN },
+    headers: { 'Authorization': 'Bearer ' + bot.options.channelAccessToken },
   }).then(function (response) {
     result = response.data;
   });
   return result.displayName;
 }
 
-async function leaveRoom(event) {
+async function leaveRoom(event, bot) {
   var url = null;
   if (event.source.type == 'group') {
     url = `https://api.line.me/v2/bot/group/{groupId}/leave`;
@@ -49,7 +49,7 @@ async function leaveRoom(event) {
   await axios({
     method: 'post',
     url: url,
-    headers: { 'Authorization': 'Bearer ' + process.env.CHANNEL_ACCESS_TOKEN },
+    headers: { 'Authorization': 'Bearer ' + bot.options.channelAccessToken },
   }).then(function (response) {
     console.log(response);
   });
