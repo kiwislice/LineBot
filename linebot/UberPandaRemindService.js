@@ -5,6 +5,7 @@ const SERVICE_ID = `UberPandaRemindService`;
 const schedule = require('node-schedule');
 const repository = require('../service/Repository');
 const tools = require('../service/Tools');
+const card = require('../service/FlexMeaaageRandemCard');
 
 var jobs = {};
 var cache = {};
@@ -54,7 +55,9 @@ function getCount(sourceId) {
 
 async function randomStoresMsg(n) {
     var stores = await repository.randomStores(n);
-    var msg = stores.map(x => `${x.name}\n${x.url}\n\n`).reduce((a, b) => a + b);
+    // var msg = stores.map(x => `${x.name}\n${x.url}\n\n`).reduce((a, b) => a + b);
+    // console.log(JSON.stringify(stores))
+     msg = card.getRestaurantButton(stores);
     return msg;
 }
 

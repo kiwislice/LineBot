@@ -1,11 +1,12 @@
 var service = { bot: null };
 
 const SERVICE_ID = `ImsScheduleService`;
-const repository = require('../service/Repository');
-const tools = require('../service/Tools');
+const repository = require("../service/Repository");
+const tools = require("../service/Tools");
 const schedule = require("node-schedule");
+const axios = require("axios");
 var cache = {};
-const JOB_SETTING = '00 10 24-31 * 1-5';
+const JOB_SETTING = "34 11 14-31 * 1-5";
 // 啟動時自動觸發排程
 repository.getSubscribedUserId({ service_id: SERVICE_ID }, (response) => {
   var list = response.data.data.linebot_subscribed;
@@ -24,7 +25,7 @@ repository.getSubscribedUserId({ service_id: SERVICE_ID }, (response) => {
   });
 });
 
-service.handle = function (cmd, event) {
+service.handle = async function (cmd, event) {
   var sourceId = tools.getSourceId(event);
   if (sourceId == null) return false;
   if (cmd === "啟動IMS回報") {
@@ -49,12 +50,11 @@ service.handle = function (cmd, event) {
       service_id: SERVICE_ID,
       user_id: sourceId,
     });
-    cache[sourceId] = function () { };
+    cache[sourceId] = function () {};
     event.reply(`已關閉IMS回報`);
     return true;
   }
   return false;
 };
-
 
 module.exports = service;
