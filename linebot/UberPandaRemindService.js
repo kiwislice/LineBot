@@ -57,11 +57,19 @@ async function randomStoresMsg(n) {
     var stores = await repository.randomStores(n);
     // var msg = stores.map(x => `${x.name}\n${x.url}\n\n`).reduce((a, b) => a + b);
     // console.log(JSON.stringify(stores))
-     msg = card.getRestaurantButton(stores);
+    msg = card.getRestaurantButton(stores);
     return msg;
 }
 
-service.handle = async function (cmd, event) {
+/**
+ * 是否為+X或-X指令
+ * @param {string} cmd 
+ */
+function isPlusXCmd(cmd) {
+    return cmd.match(/^(\+|-)[0-9.]+/) && (+cmd) != NaN;
+}
+
+service.handle = async function (cmd, event, currentBot) {
     var sourceId = tools.getSourceId(event);
 
     if (sourceId == null)
@@ -87,8 +95,18 @@ service.handle = async function (cmd, event) {
             var msg = `+1人數已滿${PEOPLE_LOWER_BOUND}人，快決定店家點餐吧\n以下為本次助理推薦店家：\n`;
             msg += await randomStoresMsg(3);
             event.reply(msg);
+        } else {
+            var username = await tools.getUserName(event, currentBot);
+            event.reply(`${username}+1`);
         }
         return true;
+    } else if (cache[sourceId] && cache[sourceId].enable && isPlusXCmd(cmd)) {
+        var username = await tools.getUserName(event, currentBot);
+        var num = +cmd;
+        if (num < 1) {
+            event.reply(`好的，本次${username}不參加`);
+            return true;
+        }
     } else if (cmd.indexOf("要吃什麼") >= 0) {
         var storesMsg = await randomStoresMsg(3);
         event.reply(storesMsg);

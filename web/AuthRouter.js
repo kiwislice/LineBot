@@ -3,6 +3,7 @@ const SERVICE_ID = `AuthRouter`;
 
 var router = require('express').Router();
 
+
 function uuidv4() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
@@ -10,22 +11,26 @@ function uuidv4() {
     });
 }
 
+router.options('/auth/login', function (req, res, next) {
+    console.log(`${SERVICE_ID} filter`);
+
+    console.log(`${SERVICE_ID} filter end`);
+    next();
+});
+
 router.post('/auth/login', function (req, res, next) {
     console.log(`${SERVICE_ID} filter`);
 
-    // var uid = req.cookies && req.cookies.uid;
-    var data = req;
-    var uid = uuidv4();
-    if (!uid) {
-        // uid = uuidv4();
-        // repository.createUser({ id: uid, name: null });
-        // cache.uid = true;
+    var name = req.body.name;
+    var uid = null;
+    var success = false;
+    if (name) {
+        uid = uuidv4();
+        repository.createUser({ id: uid, name: name });
+        success = true;
     }
-    // res.cookie('uid', uid, { expires: new Date(2025, 1), httpOnly: true });
-    res.send({ uid, uid });
+    res.send({ success: success, uid: uid });
 
-    console.log(`login data=${JSON.stringify(data)}`);
-    console.log(`login uid=${uid}`);
     console.log(`${SERVICE_ID} filter end`);
     next();
 });

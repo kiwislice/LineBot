@@ -42,7 +42,7 @@ service.handle = function (cmd, event) {
         return true;
 
     var isReplyCmd = tryParseReplyCmd(cmd);
-    console.log(replyMap);
+    console.log(`${SERVICE_ID} replyMap=${JSON.stringify(replyMap)}`);
 
     if (!isReplyCmd) {
         var sourceId = tools.getSourceId(event);
@@ -53,7 +53,7 @@ service.handle = function (cmd, event) {
             cache.shift();
         }
     }
-    console.log(cache);
+    console.log(`${SERVICE_ID} 訊息cache=${JSON.stringify(cache)}`);
 
     for (let i = cache.length - 1; i >= 0; i--) {
         var elm = cache[i];

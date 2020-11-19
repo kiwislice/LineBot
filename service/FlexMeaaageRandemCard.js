@@ -78,12 +78,23 @@ function getAqiCard(data) {
     type: "flex",
     altText: `${data.SiteName}站空氣品質即時監測資料`,
     contents: {
+      action: {
+        type: "uri",
+        label: "element.name",
+        uri: "https://airtw.epa.gov.tw/CHT/Default.aspx",
+      },
       type: "bubble",
       body: {
         type: "box",
         layout: "vertical",
         spacing: "md",
         contents: [
+          {
+            type: "image",
+            url: "https://airtw.epa.gov.tw/images/logo.svg",
+            size: "full",
+            aspectRatio: "4:1",
+          },
           {
             type: "text",
             text: `${data.SiteName}站空氣品質\n即時監測資料`,
@@ -106,7 +117,6 @@ function getAqiCard(data) {
           getAqiCardText(`PM2.5平均：${data['PM2.5_AVG']}`),
           getAqiCardText(`PM10：${data['PM10']}`),
           getAqiCardText(`PM10平均：${data['PM10_AVG']}`),
-          getAqiCardText(`資料來源：空氣品質監測網`),
         ],
       },
     },

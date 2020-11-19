@@ -7,15 +7,31 @@ const tools = require('../service/Tools');
 
 var cache = {};
 
+/**
+ * 是否為開始點餐指令
+ * @param {string} cmd 
+ */
+function isStartCmd(cmd) {
+    return !!cmd.match(/開始點餐/);
+}
+
+/**
+ * 是否為結束點餐指令
+ * @param {string} cmd 
+ */
+function isEndCmd(cmd) {
+    return !!cmd.match(/(截止|結束)點餐|點餐(截止|結束)/);
+}
+
 service.handle = async function (cmd, event, currentBot) {
     var sourceId = tools.getSourceId(event);
     if (sourceId == null)
         return false;
-    if (cmd === "開始點餐") {
+    if (isStartCmd(cmd)) {
         cache[sourceId] = { enable: true, list: {} };
         event.reply(`以下開放點餐，餐點名稱前面請加/\n範例：/雞肉飯`);
         return true;
-    } else if (cache[sourceId] && cmd === "結束點餐") {
+    } else if (cache[sourceId] && isEndCmd(cmd)) {
         cache[sourceId].enable = false;
         event.reply(`點餐截止`);
         return true;

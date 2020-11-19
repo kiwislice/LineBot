@@ -1,6 +1,7 @@
 
 
 const linebot = require('linebot');
+const tools = require('../service/Tools');
 
 // 讀取環境變數
 function readEnvSettings() {
@@ -75,18 +76,57 @@ function botOnMessageFactory(bot) {
 }
 
 async function botOnMessage(event, bot) {
-  console.log(`${bot.linewebhookPath} received message: ${event.message.text}`);
+  var rm = `${bot.linewebhookPath} received message: ${event.message.text}`;
+  console.log(tools.colorText(rm));
   var source = JSON.stringify(event.source);
-  console.log(`${source}`);
+  console.log(tools.colorText(`source=${source}`));
 
-  // 貼圖text會是undefined
-  if (event.message.text) {
+  // console.log(tools.colorText(`event=${JSON.stringify(event)}`, 'green'));
+  if (event.message.type == 'text' && event.message.text) { // 文字
     var cmd = event.message.text.trim();
     for (var i = 0; i < services.length; i++) {
       // 有1個能處理就不需要其他
       if (await services[i].handle(cmd, event, bot))
         break;
     }
+  } else if (event.message.type == 'sticker') { // 貼圖
+    // 範例
+    // {
+    //   "type": "message",
+    //   "replyToken": "ca5ec333daad4bfc8c193c1b2c04fc5f",
+    //   "source": {
+    //     "userId": "Uc5452fe54552f331fa5182999ad6db1c",
+    //     "type": "user"
+    //   },
+    //   "timestamp": 1605748730104,
+    //   "mode": "active",
+    //   "message": {
+    //     "type": "sticker",
+    //     "id": "13055684833831",
+    //     "stickerId": "1192266",
+    //     "packageId": "1027905",
+    //     "stickerResourceType": "STATIC"
+    //   }
+    // }
+  } else if (event.message.type == 'image') { // 圖片
+    // 範例
+    // {
+    //   "type": "message",
+    //   "replyToken": "63e167caa74146179ea5799282f00d7a",
+    //   "source": {
+    //     "userId": "Uc5452fe54552f331fa5182999ad6db1c",
+    //     "type": "user"
+    //   },
+    //   "timestamp": 1605748883442,
+    //   "mode": "active",
+    //   "message": {
+    //     "type": "image",
+    //     "id": "13055695123160",
+    //     "contentProvider": {
+    //       "type": "line"
+    //     }
+    //   }
+    // }
   }
 }
 
