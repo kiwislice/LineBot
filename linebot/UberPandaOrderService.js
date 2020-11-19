@@ -20,7 +20,7 @@ function isStartCmd(cmd) {
  * @param {string} cmd 
  */
 function isEndCmd(cmd) {
-    return !!cmd.match(/(截止|結束)點餐|點餐(截止|結束)/);
+    return !!cmd.match(/^(截止|結束|停止)點餐|點餐(截止|結束|停止)/);
 }
 
 service.handle = async function (cmd, event, currentBot) {

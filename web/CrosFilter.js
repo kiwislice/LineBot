@@ -5,7 +5,9 @@ var router = require('express').Router();
 
 router.use(function (req, res, next) {
     console.log(`${SERVICE_ID} filter`);
-    res.header('Access-Control-Allow-Origin', '*');
+    var origin = req.headers.origin;
+    res.header('Access-Control-Allow-Origin', origin || '*');
+    res.header('Access-Control-Allow-Headers', ['X-PINGOTHER', 'Content-Type']);
     console.log(`${SERVICE_ID} filter end`);
     next();
 });

@@ -92,9 +92,9 @@ service.handle = async function (cmd, event, currentBot) {
         if (count >= PEOPLE_LOWER_BOUND) {
             clearTimeout(cache[sourceId].timeout);
             cache[sourceId].enable = false;
-            var msg = `+1人數已滿${PEOPLE_LOWER_BOUND}人，快決定店家點餐吧\n以下為本次助理推薦店家：\n`;
-            msg += await randomStoresMsg(3);
+            var msg = `+1人數已滿${PEOPLE_LOWER_BOUND}人，快決定店家點餐吧`;
             event.reply(msg);
+            currentBot.push(sourceId, await randomStoresMsg(3));
         } else {
             var username = await tools.getUserName(event, currentBot);
             event.reply(`${username}+1`);

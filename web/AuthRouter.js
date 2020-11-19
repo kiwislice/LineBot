@@ -2,7 +2,7 @@
 const SERVICE_ID = `AuthRouter`;
 
 var router = require('express').Router();
-
+const repository = require('../service/Repository');
 
 function uuidv4() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -12,9 +12,6 @@ function uuidv4() {
 }
 
 router.options('/auth/login', function (req, res, next) {
-    console.log(`${SERVICE_ID} filter`);
-
-    console.log(`${SERVICE_ID} filter end`);
     next();
 });
 
