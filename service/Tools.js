@@ -96,6 +96,25 @@ function yesterday() {
 }
 
 /**
+ * 取得日期文字：EX:2020-11-18 11:12:13
+ * @param {Date} d
+ */
+function toYMDHMS(d) {
+  return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()} ${toHMS(d)}}`;
+}
+
+/**
+ * 取得日期文字：EX:11:12:13
+ * @param {Date} d
+ */
+function toHMS(d) {
+  var h = d.getHours() < 10 ? '0' + d.getHours() : d.getHours();
+  var m = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes();
+  var s = d.getSeconds() < 10 ? '0' + d.getSeconds() : d.getSeconds();
+  return `${h}:${m}:${s}`;
+}
+
+/**
  * 讓console顯示彩色文字
  * @param {string} text 文字
  * @param {string} color red|green|yellow|blue|purple|cyan
@@ -119,7 +138,7 @@ function colorText(text, color) {
 }
 
 module.exports = {
-  getSourceId, getUserName, leaveRoom, getBotName, getBotPushCount, colorText,
+  getSourceId, getUserName, leaveRoom, getBotName, getBotPushCount, colorText, toYMDHMS, toHMS
 };
 
 

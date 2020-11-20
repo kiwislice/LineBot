@@ -1,6 +1,6 @@
 
 
-function getRendomCard() {
+function getRendomCard(msg) {
   var obj = {
     type: "flex",
     altText: "今日UberPanda餐廳推薦!",
@@ -28,7 +28,7 @@ function getRendomCard() {
           },
           {
             type: "text",
-            text: "今日午餐-餐廳推薦!",
+            text: msg || "今日午餐-餐廳推薦!",
             wrap: true,
             size: "md",
             align: "center",
@@ -112,7 +112,8 @@ function getAqiCard(data) {
             align: "center",
             color: "#000000",
           },
-          getAqiCardText(`空氣品質指標 AQI：${data.AQI}(${data.Status})`),
+          getAqiCardText(`空氣品質指標 AQI：${data.AQI}`),
+          getAqiCardText(`${data.Status}`),
           getAqiCardText(`PM2.5：${data['PM2.5']}`),
           getAqiCardText(`PM2.5平均：${data['PM2.5_AVG']}`),
           getAqiCardText(`PM10：${data['PM10']}`),
@@ -124,15 +125,20 @@ function getAqiCard(data) {
   return obj;
 }
 
-function getRestaurantButton(msg) {
-  var obj = getRendomCard();
-  msg.forEach(element =>
+/**
+ * 取得店家清單的flex訊息物件
+ * @param {array} stores 店家清單
+ * @param {string} msg 可選的副標題文字
+ */
+function getRestaurantButton(stores, msg) {
+  var obj = getRendomCard(msg);
+  stores.forEach((element, index) =>
     obj.contents.body.contents.push({
       type: "button",
       style: "primary",
       action: {
         type: "uri",
-        label: element.name,
+        label: `${index + 1}. ${element.name}`,
         uri: element.url,
       },
     })
