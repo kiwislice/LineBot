@@ -6,7 +6,7 @@ const tools = require("../service/Tools");
 const schedule = require("node-schedule");
 const axios = require("axios");
 var cache = {};
-const JOB_SETTING = "34 11 14-31 * 1-5";
+const JOB_SETTING = "00 10 24-31 * 1-5";
 // 啟動時自動觸發排程
 repository.getSubscribedUserId({ service_id: SERVICE_ID }, (response) => {
   var list = response.data.data.linebot_subscribed;
