@@ -13,12 +13,12 @@ var jobs = {};
 var cache = {};
 
 /**訂外送的最低人數*/
-const PEOPLE_LOWER_BOUND = 1;
+const PEOPLE_LOWER_BOUND = 3;
 const JOB_SETTING = '0 0 10 * * 1-5';
 /**等待報名時間 */
-const WAIT_SIGN_UP_MS = 30 /** 60*/ * 1000;
+const WAIT_SIGN_UP_MS = 30 * 60 * 1000;
 /**等待投票時間 */
-const WAIT_VOTE_MS = 20 /** 60*/ * 1000;
+const WAIT_VOTE_MS = 20 * 60 * 1000;
 /**隨機抽選店家數量*/
 const RANDOM_STORE_COUNT = 3;
 
