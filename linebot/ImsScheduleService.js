@@ -36,11 +36,17 @@ service.handle = async function (cmd, event) {
     cache[sourceId] = function () {
       event.reply(`已啟動IMS回報`);
       schedule.scheduleJob(JOB_SETTING, function () {
-        service.bot.push(
-          sourceId,
-          `今天是本月最後一個工作天,請各位記得上IMS回報每月工時.`
-        );
-        cache[sourceId]();
+        var date = new Date();
+        var today = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+        var lastWeekDay = today.getDate() - today.getDay() + 1;
+        if (lastWeekDay <= date.getDate()) {
+          service.bot.push(
+            sourceId,
+            `本週是這個月的最後一個工作週，請記得在本月的最後一天上IMS回報工作時數，若有請假的請提前回報!!!.`
+          );
+          cache[sourceId]();
+        }
+
       });
     };
     cache[sourceId]();
@@ -50,7 +56,7 @@ service.handle = async function (cmd, event) {
       service_id: SERVICE_ID,
       user_id: sourceId,
     });
-    cache[sourceId] = function () {};
+    cache[sourceId] = function () { };
     event.reply(`已關閉IMS回報`);
     return true;
   }
