@@ -58,13 +58,9 @@ function getAqiCard(data) {
 
   /**
  {
-    "CO": "0.66",
-    "CO_8hr": "0.5",
     "NO": "8.8",
     "NO2": "23.1",
     "NOx": "31.9",
-    "O3": "7.2",
-    "O3_8hr": "8",
     "Pollutant": "細懸浮微粒",
     "SO2": "3.6",
     "SO2_AVG": "4",
@@ -114,10 +110,23 @@ function getAqiCard(data) {
           },
           getAqiCardText(`空氣品質指標 AQI：${data.AQI}`),
           getAqiCardText(`${data.Status}`),
-          getAqiCardText(`PM2.5：${data['PM2.5']}`),
-          getAqiCardText(`PM2.5平均：${data['PM2.5_AVG']}`),
-          getAqiCardText(`PM10：${data['PM10']}`),
-          getAqiCardText(`PM10平均：${data['PM10_AVG']}`),
+          getAqiCardText(`PM2.5小時濃度：${data['PM2.5']}`),
+          getAqiCardText(`PM2.5移動平均：${data['PM2.5_AVG']}`),
+          getAqiCardText(`PM10小時濃度：${data['PM10']}`),
+          getAqiCardText(`PM10移動平均：${data['PM10_AVG']}`),
+          getAqiCardText(`臭氧小時濃度：${data['O3']}`),
+          getAqiCardText(`臭氧移動平均：${data['O3_8hr']}`),
+          getAqiCardText(`CO小時濃度：${data['CO']}`),
+          getAqiCardText(`CO移動平均：${data['CO_8hr']}`),
+          {
+            type: "button",
+            // style: "primary",
+            action: {
+              type: "uri",
+              label: `各項指標定義請按此`,
+              uri: `https://airtw.epa.gov.tw/CHT/Information/Standard/AirQualityIndicator.aspx`,
+            },
+          },
         ],
       },
     },
@@ -129,9 +138,14 @@ function getAqiCard(data) {
  * 取得店家清單的flex訊息物件
  * @param {array} stores 店家清單
  * @param {string} msg 可選的副標題文字
+ * @param {array} afterMsg 插入在副標題之後的json物件
+ * @param {array} afterStore 插入在店家清單之後的json物件
  */
-function getRestaurantButton(stores, msg) {
+function getRestaurantButton(stores, msg, afterMsg = [], afterStore = []) {
   var obj = getRendomCard(msg);
+  afterMsg.forEach((element, index) => {
+    obj.contents.body.contents.push(element);
+  });
   stores.forEach((element, index) =>
     obj.contents.body.contents.push({
       type: "button",
@@ -143,6 +157,9 @@ function getRestaurantButton(stores, msg) {
       },
     })
   );
+  afterStore.forEach((element, index) => {
+    obj.contents.body.contents.push(element);
+  });
   return obj;
 }
 

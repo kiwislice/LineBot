@@ -141,7 +141,9 @@ module.exports = {
   },
   getUserById: async function (uid) {
     var user = null;
-    await postDb(GET_USER_BY_ID, null, (response) => user = response.data.data.user_by_pk);
+    await postDb(GET_USER_BY_ID, { id: uid }, (response) => {
+      user = response.data.data.user_by_pk;
+    });
     return user;
   },
   getAllStores: async function () {
