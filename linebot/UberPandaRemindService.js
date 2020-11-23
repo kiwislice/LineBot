@@ -73,7 +73,7 @@ function getCount(sourceId) {
     var count = 0;
     if (cache[sourceId]) {
         for (const id in cache[sourceId].ids) {
-            count++;
+            count += cache[sourceId].ids[id];
         }
     }
     return count;
@@ -169,6 +169,7 @@ service.handle = async function (cmd, event, currentBot) {
         var username = await tools.getUserName(event, currentBot);
         var num = +cmd;
         if (num < 1) {
+            cache[sourceId].ids[event.source.userId] = 0;
             event.reply(`好的，本次${username}不參加`);
             return true;
         }

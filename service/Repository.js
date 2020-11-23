@@ -47,6 +47,15 @@ const CREATE_USER = gql`
   }
 `;
 
+const GET_USER_BY_ID = gql`
+  query getUserById($id: String!) {
+    user_by_pk(id: $id) {
+      id
+      name
+    }
+  }
+`;
+
 const GET_ALL_STORE = gql`
   query allStore {
     store(order_by: {score: desc, id: desc}) {
@@ -129,6 +138,11 @@ module.exports = {
   createUser: function (obj, resCallback) {
     var o = { id: obj.id, name: obj.name };
     postDb(CREATE_USER, o, resCallback);
+  },
+  getUserById: async function (uid) {
+    var user = null;
+    await postDb(GET_USER_BY_ID, null, (response) => user = response.data.data.user_by_pk);
+    return user;
   },
   getAllStores: async function () {
     var stores = [];

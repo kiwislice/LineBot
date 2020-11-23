@@ -32,16 +32,17 @@ router.post('/auth/login', function (req, res, next) {
     next();
 });
 
-router.get('/auth/isAuthenticated/:token', function (req, res, next) {
+router.get('/auth/isAuthenticated/:uid', function (req, res, next) {
     console.log(`${SERVICE_ID} filter`);
 
-    // req.params.token
-    // var uid = req.cookies && req.cookies.uid;
-    res.send({ isAuthenticated: (req.params.token ? true : false) });
+    var rtn = { isAuthenticated: false, uid: uid };
+    if (req.params.uid) {
+        var user = repository.getUserById(req.params.uid);
+        rtn.isAuthenticated = !!user;
+    }
+    res.send(rtn);
 
-    console.log(`isAuthenticated uid=${uid}`);
     console.log(`${SERVICE_ID} filter end`);
-    next();
 });
 
 module.exports = router;
