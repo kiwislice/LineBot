@@ -35,7 +35,7 @@ router.post('/auth/login', function (req, res, next) {
 router.get('/auth/isAuthenticated/:uid', function (req, res, next) {
     console.log(`${SERVICE_ID} filter`);
 
-    var rtn = { isAuthenticated: false, uid: uid };
+    var rtn = { isAuthenticated: false, uid: req.params.uid };
     if (req.params.uid) {
         var user = repository.getUserById(req.params.uid);
         rtn.isAuthenticated = !!user;
