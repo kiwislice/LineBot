@@ -12,9 +12,9 @@ var jobs = {};
 /**訂餐提醒過程暫存區 */
 var cache = {};
 
+const JOB_SETTING = '0 0 10 * * 1-5';
 /**訂外送的最低人數*/
 const PEOPLE_LOWER_BOUND = 3;
-const JOB_SETTING = '0 0 10 * * 1-5';
 /**等待報名時間 */
 const WAIT_SIGN_UP_MS = 30 * 60 * 1000;
 /**等待投票時間 */
@@ -22,6 +22,10 @@ const WAIT_VOTE_MS = 20 * 60 * 1000;
 /**隨機抽選店家數量*/
 const RANDOM_STORE_COUNT = 3;
 
+// 測試用
+// const PEOPLE_LOWER_BOUND = 1;
+// const WAIT_SIGN_UP_MS = 30 * 1000;
+// const WAIT_VOTE_MS = 20 * 1000;
 
 const MSG = `今天要訂外送嗎？
 想訂的人請在10:30之前喊+1，不足${PEOPLE_LOWER_BOUND}人就不訂了哦～
@@ -49,6 +53,10 @@ const CACHE_DATA_OBJ = {
 
 /**開始提醒*/
 function startRemind(sourceId, bot) {
+    if (cache[sourceId] && cache[sourceId].timeout) {
+        clearTimeout(cache[sourceId].timeout);
+    }
+
     bot.push(sourceId, MSG);
     cache[sourceId] = Object.assign({}, CACHE_DATA_OBJ);
     cache[sourceId].onSignUp = true;
@@ -97,6 +105,10 @@ function isOnVote(sourceId) {
 
 /**開始投票 */
 async function startVote(sourceId, bot) {
+    if (cache[sourceId] && cache[sourceId].timeout) {
+        clearTimeout(cache[sourceId].timeout);
+    }
+
     cache[sourceId] = Object.assign({}, CACHE_DATA_OBJ);
     cache[sourceId].onVote = true;
     cache[sourceId].ids = {};
@@ -161,6 +173,10 @@ service.handle = async function (cmd, event, currentBot) {
             return true;
         }
     } else if (cmd.indexOf("要吃什麼") >= 0) {
+        if (isOnVote(sourceId)) {
+            event.reply(`投票進行中，暫時停用隨機抽店家功能`);
+            return true;
+        }
         var stores = await repository.randomStores(RANDOM_STORE_COUNT);
         var storesMsg = card.getRestaurantButton(stores);
         event.reply(storesMsg);

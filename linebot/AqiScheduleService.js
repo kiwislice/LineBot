@@ -18,9 +18,7 @@ repository.getSubscribedUserId({ service_id: SERVICE_ID }, (response) => {
   list.forEach((elm) => {
     cache[elm.user_id] = schedule.scheduleJob(JOB_SETTING, async () => {
       var msg = await getAqiMsg();
-      console.log(`msg=${msg}`);
       service.bot.push(elm.user_id, msg);
-      console.log('service.bot.push');
     });
     console.log(`${SERVICE_ID} add cache ${elm.user_id}`);
   });
@@ -97,6 +95,9 @@ service.handle = async function (cmd, event) {
     cache[sourceId].cancel();
     cache[sourceId] = null;
     event.reply(`已關閉空氣品質通知`);
+    return true;
+  } else if (cmd === "空氣品質") {
+    event.reply(await getAqiMsg());
     return true;
   }
   return false;
