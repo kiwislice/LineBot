@@ -72,18 +72,19 @@ async function getBotName(bot) {
   return result.displayName;
 }
 
-/**取得bot到昨天截止已push數量 */
+/**取得bot本月到昨天截止已push數量 */
 async function getBotPushCount(bot) {
-  const url = `https://api.line.me/v2/bot/message/delivery/push`;
+  // const url = `https://api.line.me/v2/bot/message/delivery/push`;
+  const url = `https://api.line.me/v2/bot/message/quota/consumption`;
   var result = {};
   await axios({
     method: 'get',
-    url: `${url}?date=${yesterday()}`,
+    url: url,//`${url}?date=${yesterday()}`,
     headers: { 'Authorization': 'Bearer ' + bot.options.channelAccessToken },
   }).then(function (response) {
     result = response.data;
   });
-  return result.success;
+  return result.totalUsage;
 }
 
 /**
@@ -100,7 +101,7 @@ function yesterday() {
  * @param {Date} d
  */
 function toYMDHMS(d) {
-  return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()} ${toHMS(d)}}`;
+  return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()} ${toHMS(d)}`;
 }
 
 /**

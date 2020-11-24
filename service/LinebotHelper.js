@@ -59,12 +59,12 @@ const LeaveRoomService = require('../linebot/LeaveRoomService');
 const ReplyService = require('../linebot/ReplyService');
 const TestScheduleService = require('../linebot/TestScheduleService');
 const InfoService = require('../linebot/InfoService');
-
+const WeatherService = require('../linebot/WeatherService');
 
 
 
 const services = [UberPandaRemindService, UberPandaOrderService, ImsScheduleService,
-  AqiScheduleService, LeaveRoomService, ReplyService, TestScheduleService, InfoService, ErrorCmdService];
+  AqiScheduleService, LeaveRoomService, ReplyService, TestScheduleService, InfoService, WeatherService, ErrorCmdService];
 // 原本塞給各服務的bot改為代理
 services.forEach(elm => elm.bot = botProxy);
 

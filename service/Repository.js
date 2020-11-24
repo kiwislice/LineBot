@@ -30,6 +30,14 @@ const DELETE_SUBSCRIBED_USER_ID = gql`
   }
 `;
 
+const GET_DISTINCT_SUBSCRIBED_USER_ID = gql`
+  query distinctSubscribedUserId($distinct_on: [linebot_subscribed_select_column!] = user_id) {
+    linebot_subscribed(distinct_on: $distinct_on) {
+      user_id
+    }
+  }
+`;
+
 const GET_USER = gql`
   query allUser {
     user(order_by: {id: asc}) {
@@ -131,6 +139,13 @@ module.exports = {
   deleteSubscribedUserId: function (obj, resCallback) {
     var o = { service_id: obj.service_id, user_id: obj.user_id };
     postDb(DELETE_SUBSCRIBED_USER_ID, o, resCallback);
+  },
+  getDistinctSubscribedUserId: async function () {
+    var rtn = [];
+    await postDb(GET_DISTINCT_SUBSCRIBED_USER_ID, null, (response) => {
+      rtn = response.data.data.linebot_subscribed.map(x => x.user_id);
+    });
+    return rtn;
   },
   getAllUser: function (resCallback) {
     postDb(GET_USER, null, resCallback);
