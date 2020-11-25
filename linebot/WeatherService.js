@@ -6,7 +6,7 @@ const repository = require('../service/Repository');
 const tools = require('../service/Tools');
 const schedule = require("node-schedule");
 const axios = require('axios');
-const card = require('../service/FlexMeaaageRandemCard');
+const flex = require('../service/FlexMeaaageRandemCard');
 
 var cache = {};
 const JOB_SETTING = '0 15,45 7-17 * * 1-5';
@@ -124,11 +124,7 @@ async function getRadarPng() {
       // donothing
     });
     if (exist)
-      return {
-        "type": "image",
-        "originalContentUrl": urls[i],
-        "previewImageUrl": urls[i]
-      };
+      return flex.mo_image(urls[i]);
   }
   return null;
 }
@@ -168,8 +164,8 @@ service.handle = async function (cmd, event) {
         var msg = await getAqiMsg();
         service.bot.push(sourceId, msg);
       });
-      event.reply(`已開啟天氣警特報通知`);
     }
+    event.reply(`已開啟天氣警特報通知`);
     return true;
   } else if (cache[sourceId] && cmd === "關閉天氣警特報通知") {
     repository.deleteSubscribedUserId({
@@ -187,9 +183,11 @@ service.handle = async function (cmd, event) {
   } else if (cmd === "雷達回波") {
     event.reply(await getRadarPng());
     return true;
+  } else if (cmd == 'menu') {
+    event.reply(flex.asMenu(['雷達回波', '空氣品質', '天氣警特報']));
+    return true;
   }
   return false;
 };
-
 
 module.exports = service;

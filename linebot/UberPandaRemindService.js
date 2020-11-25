@@ -114,7 +114,7 @@ async function startVote(sourceId, bot) {
     cache[sourceId].ids = {};
 
     var endTime = new Date(Date.now() + WAIT_VOTE_MS);
-    var voteMsg = `請使用"/序號"投票，範例/1。\n投票將於${tools.toHMS(endTime)}結束。\n`;
+    var voteMsg = `請使用"/序號"投票，範例/1。\n投票將於${tools.toHMS(endTime)}結束。\n輸入"重抽"可刷新店家清單\n`;
     var uberPandaLink = [{
         type: "button",
         // style: "primary",
@@ -200,7 +200,7 @@ service.handle = async function (cmd, event, currentBot) {
             event.reply(`${username}投給了${cache[sourceId].stores[seqNo].name}`);
             return true;
         }
-    } else if (isOnVote(sourceId) && cmd.match(/^重抽$/)) {
+    } else if (isOnVote(sourceId) && cmd == "重抽") {
         startVote(sourceId, currentBot);
         return true;
     } else if (cmd == "startVote") {

@@ -24,7 +24,7 @@ var job = schedule.scheduleJob(JOB_SETTING, async () => {
     if (bcs.length > 0) {
         var userIds = await repository.getDistinctSubscribedUserId();
         userIds.forEach(userId => {
-            bcs.forEach(bc => bc.bot.push(userId, `我好像快死了...倒數${499 - bc.count}...`));
+            bcs.forEach(bc => bc.bot.push(userId, `HP剩餘：${499 - bc.count}...`));
         });
     }
 });
