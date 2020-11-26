@@ -19,6 +19,9 @@ const CrosFilter = require('./web/CrosFilter');
 const HomeRouter = require('./web/HomeRouter');
 const AuthRouter = require('./web/AuthRouter');
 
+
+
+
 // middleware
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
@@ -30,6 +33,9 @@ app.use(urlencodedParser);
 // 額外加上根目錄的GET
 app.use("/", /*CookieFilter,*/ CrosFilter, HomeRouter);
 app.use(PrintRequestFilter, CrosFilter, AuthRouter);
+
+// app.use(PrintRequestFilter, LineNotifyRouter);
+
 
 const port = process.env.PORT;
 app.listen(port, () => {

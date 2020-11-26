@@ -12,7 +12,7 @@ var cache = {};
  * @param {string} cmd 
  */
 function isStartCmd(cmd) {
-    return !!cmd.match(/開始點餐/);
+    return !!cmd.match(/^開始點餐$/);
 }
 
 /**

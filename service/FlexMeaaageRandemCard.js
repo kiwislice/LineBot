@@ -11,8 +11,8 @@ function mo_sticker(packageId, stickerId, options) {
     "type": "sticker",
     "packageId": packageId,
     "stickerId": stickerId,
+    ...options
   };
-  Object.assign(o, options);
   return o;
 }
 
@@ -28,8 +28,8 @@ function mo_image(url, options) {
     originalContentUrl: url,
     previewImageUrl: url,
     // url: url,
+    ...options
   };
-  Object.assign(o, options);
   return o;
 }
 
@@ -43,8 +43,8 @@ function fmo_image(url, options) {
     type: "image",
     url: url,
     size: "full",
+    ...options
   };
-  Object.assign(o, options);
   return o;
 }
 
@@ -58,8 +58,8 @@ function fmo_text(text, options) {
     type: "text",
     text: text,
     wrap: true,
+    ...options
   };
-  Object.assign(o, options);
   return o;
 }
 
@@ -74,8 +74,8 @@ function fmo_button(action, options) {
     type: "button",
     style: "link", // primary|secondary|link
     action: action,
+    ...options
   };
-  Object.assign(o, options);
   return o;
 }
 
@@ -84,37 +84,76 @@ function fmo_button(action, options) {
 /**
  * 產生flex bubble訊息(垂直)
  * @param {string} altText 替代文字 
- * @param {array} body box內容
- * @param {object} action action物件
- * @param {object} options 額外參數
+ * @param {object} body box內容
+ * @param {object} contentsOptions contents額外參數
+ * @param {object} flexOptions flex額外參數
  */
-function flexBubble(altText, body, action, options) {
+function flexBubble(altText, body, { contentsOptions, flexOptions } = {}) {
   var o = {
     "type": "flex",
     "altText": altText,
     "contents": {
-      "action": action,
       "type": "bubble",
       "body": body,
-    }
+      ...contentsOptions
+    },
+    ...flexOptions
   };
-  Object.assign(o, options);
   return o;
 }
 
 /**
- * 產生box容器
+ * 產生horizontal box容器
  * @param {array} contents 內容
  * @param {object} options 額外參數
  */
-function box(contents = [], options) {
+function hBox(contents = [], options) {
   var o = {
     "type": "box",
-    "layout": true ? "vertical" : "horizontal",
+    "layout": "horizontal",
     "contents": contents,
+    ...options
   };
-  Object.assign(o, options);
   return o;
+}
+
+/**
+ * vertical box容器
+ * @param {array} contents 內容
+ * @param {object} options 額外參數
+ */
+function vBox(contents = [], options) {
+  var o = {
+    "type": "box",
+    "layout": "vertical",
+    "contents": contents,
+    ...options
+  };
+  return o;
+}
+
+/**
+ * 產生grid排列的box容器
+ * @param {array} contents 內容
+ * @param {number} cols column數
+ * @param {object} options 額外參數
+ */
+function gridBox(contents = [], cols = 2, options) {
+  // 分裝grid
+  var grid = [];
+  for (var c = 0; c < cols; c++) {
+    for (var r = 0; r < Math.ceil(contents.length / cols); r++) {
+      if (grid[r] == undefined)
+        grid[r] = [];
+      if (contents[r * cols + c])
+        grid[r].push(contents[r * cols + c]);
+    }
+  }
+  // row轉box
+  grid = grid.map(row => {
+    return hBox(row, options);
+  });
+  return vBox(grid, options);
 }
 
 /**
@@ -164,26 +203,7 @@ function asMenu(labels = [], cols = 2) {
     style: 'primary',
     margin: '2px',
   }));
-
-  // 分裝grid
-  var contents = [];
-  for (var c = 0; c < cols; c++) {
-    for (var r = 0; r < Math.ceil(labels.length / cols); r++) {
-      if (contents[r] == undefined)
-        contents[r] = [];
-      if (btns[r * cols + c])
-        contents[r].push(btns[r * cols + c]);
-    }
-  }
-  // row轉box
-  contents = contents.map(row => {
-    return box(row, {
-      layout: "horizontal",
-      borderWidth: 'light',
-      backgroundColor: '#FDD692FF',
-    });
-  });
-  return flexBubble('menu', box(contents, {
+  return flexBubble('menu', gridBox(btns, cols, {
     borderWidth: 'light',
     backgroundColor: '#FDD692FF',
   }));
@@ -250,6 +270,22 @@ function getAqiCardText(text) {
 function getAqiCard(data) {
   const defineAction = ao_uri(`https://airtw.epa.gov.tw/CHT/Information/Standard/AirQualityIndicator.aspx`, `各項指標定義請按此`);
   const webAction = ao_uri(`https://airtw.epa.gov.tw/CHT/Default.aspx`);
+
+  var btns = ['雷達回波', '空氣品質', '天氣警特報'].map(s => fmo_button(ao_message(s), {
+    color: '#7BA23FFF',
+    height: 'sm',
+    style: 'primary',
+    margin: '2px',
+  }));
+  var footer = gridBox(btns, 2, {
+    borderWidth: 'light',
+    backgroundColor: '#FCFAF2FF',
+  });
+  footer.contents.unshift(fmo_text('以下為可點選的其他資訊', { align: 'center' }));
+
+  const contentsOptions = { action: webAction, footer: footer };
+
+
   /**
  {
     "NO": "8.8",
@@ -265,7 +301,7 @@ function getAqiCard(data) {
  */
 
   var obj = flexBubble(`${data.SiteName}站空氣品質即時監測資料`,
-    box([
+    vBox([
       fmo_image("https://airtw.epa.gov.tw/images/logo.svg", {
         aspectRatio: "4:1",
       }),
@@ -292,9 +328,14 @@ function getAqiCard(data) {
       getAqiCardText(`臭氧移動平均：${data['O3_8hr']}`),
       getAqiCardText(`CO小時濃度：${data['CO']}`),
       getAqiCardText(`CO移動平均：${data['CO_8hr']}`),
-      fmo_button(defineAction),
+      fmo_button(defineAction, {
+        color: '#A5DEE4FF',
+        height: 'sm',
+        style: 'secondary',
+        margin: '2px',
+      }),
     ])
-    , webAction);
+    , { contentsOptions: contentsOptions });
 
   return obj;
 }
@@ -335,7 +376,7 @@ function getRestaurantButton(stores, msg, afterMsg = [], afterStore = []) {
 
 module.exports = {
   mo_sticker, mo_image, fmo_image, fmo_text,
-  fmo_button, flexBubble, box,
+  fmo_button, flexBubble, vBox, hBox,
   ao_message, ao_uri, getRendomCard,
   getAqiCardText, getAqiCard, getRestaurantButton, asMenu,
 };
