@@ -16,6 +16,7 @@ const JOB_SETTING = '0 0 9 * * 1-5';
 
 // 啟動時自動觸發排程
 var job = schedule.scheduleJob(JOB_SETTING, async () => {
+    console.log(`schedule run ${SERVICE_ID}`);
     var bcs = await Promise.all(service.bot.bots.map(async (b) => {
         var count = await tools.getBotPushCount(b);
         return { bot: b, count: count };

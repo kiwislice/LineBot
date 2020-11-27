@@ -16,13 +16,18 @@ const JOB_SETTING = '0 20 17 * * 1-5';
 repository.getSubscribedUserId({ service_id: SERVICE_ID }, (response) => {
   var list = response.data.data.linebot_subscribed;
   list.forEach((elm) => {
-    cache[elm.user_id] = schedule.scheduleJob(JOB_SETTING, async () => {
-      var msg = await getAqiMsg();
-      service.bot.push(elm.user_id, msg);
-    });
+    cache[elm.user_id] = schedule.scheduleJob(JOB_SETTING, jobFactory(elm.user_id));
     console.log(`${SERVICE_ID} add cache ${elm.user_id}`);
   });
 });
+
+function jobFactory(sourceId) {
+  return async function () {
+    console.log(`schedule run ${SERVICE_ID}`);
+    var msg = await getAqiMsg();
+    service.bot.push(sourceId, msg);
+  };
+}
 
 
 /**
@@ -80,10 +85,7 @@ service.handle = async function (cmd, event) {
       user_id: sourceId,
     });
     if (!cache[sourceId]) {
-      cache[sourceId] = schedule.scheduleJob(JOB_SETTING, async function () {
-        var msg = await getAqiMsg();
-        service.bot.push(sourceId, msg);
-      });
+      cache[sourceId] = schedule.scheduleJob(JOB_SETTING, jobFactory(sourceId));
       event.reply(`已開啟空氣品質通知`);
     }
     return true;

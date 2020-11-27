@@ -3,6 +3,26 @@
 require('dotenv').config();
 const express = require('express');
 const LinebotHelper = require('./service/LinebotHelper');
+const LineNotifyService = require('./linenotify/LineNotifyService');
+
+// 設定axios全域log
+const tools = require('./service/Tools');
+const axios = require('axios');
+axios.interceptors.response.use(function (response) {
+  // Do something with response data
+  return response;
+}, function (error) {
+  var e = Object.assign({}, error);
+  delete e.stack;
+  // 雷達回波圖的error可略過
+  if (!e.config.url.includes("www.cwb.gov.tw/Data/radar")) {
+    var msg = tools.colorText(`${JSON.stringify(error)}`, 'red');
+    console.log(`axios global catch error:\n${msg}`);
+    LineNotifyService.sendNotifyToDev(`axios global catch error:\n${msg}`);
+  }
+  // Do something with response error
+  return Promise.reject(error);
+});
 
 
 // create Express app

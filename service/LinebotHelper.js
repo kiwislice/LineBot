@@ -2,6 +2,8 @@
 
 const linebot = require('linebot');
 const tools = require('../service/Tools');
+const LineNotifyService = require('../linenotify/LineNotifyService');
+
 
 // 讀取環境變數
 function readEnvSettings() {
@@ -46,7 +48,10 @@ var botProxy = {
   bots: bots,
   // push時就是全部bot都推
   push: function (to, msg) {
-    bots.forEach(bot => bot.push(to, msg));
+    bots.forEach(bot => {
+      bot.push(to, msg);
+      LineNotifyService.sendNotifyToDev(`${bot.linewebhookPath} push ${JSON.stringify(msg)}`);
+    });
   },
 };
 
@@ -60,8 +65,6 @@ const ReplyService = require('../linebot/ReplyService');
 const TestScheduleService = require('../linebot/TestScheduleService');
 const InfoService = require('../linebot/InfoService');
 const WeatherService = require('../linebot/WeatherService');
-
-const LineNotifyService = require('../linenotify/LineNotifyService');
 
 
 

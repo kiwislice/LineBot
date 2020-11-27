@@ -17,6 +17,7 @@ repository.getSubscribedUserId({ service_id: SERVICE_ID }, (response) => {
   var list = response.data.data.linebot_subscribed;
   list.forEach((elm) => {
     cache[elm.user_id] = schedule.scheduleJob(JOB_SETTING, async () => {
+      console.log(`schedule run ${SERVICE_ID}`);
       var data = await getWC0033001Data();
       if (data) {
         service.bot.push(elm.user_id, toMsg(data));
@@ -107,6 +108,8 @@ function getNewestRadarPngUrl(n) {
   for (var i = 0; i < n; i++) {
     rtn.push(`https://www.cwb.gov.tw/Data/radar/CV1_TW_3600_${time}.png`);
     time -= 10;
+    while ((time % 100) >= 60)
+      time -= 10;
   }
   return rtn;
 }
@@ -121,6 +124,7 @@ async function getRadarPng() {
     await axios.head(urls[i]).then(function (response) {
       exist = true;
     }).catch(function (error) {
+      console.log(`雷達回波圖url不存在:${urls[i]}`);
       // donothing
     });
     if (exist)
@@ -161,6 +165,7 @@ service.handle = async function (cmd, event) {
     });
     if (!cache[sourceId]) {
       cache[sourceId] = schedule.scheduleJob(JOB_SETTING, async function () {
+        console.log(`schedule run ${SERVICE_ID}`);
         var msg = await getAqiMsg();
         service.bot.push(sourceId, msg);
       });

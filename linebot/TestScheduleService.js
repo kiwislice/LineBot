@@ -15,6 +15,7 @@ repository.getSubscribedUserId({ service_id: SERVICE_ID }, (response) => {
   var list = response.data.data.linebot_subscribed;
   list.forEach((elm) => {
     cache[elm.user_id] = schedule.scheduleJob(JOB_SETTING, function () {
+      console.log(`schedule run ${SERVICE_ID}`);
       doSomething(elm.user_id);
     });
     console.log(`${SERVICE_ID} add cache ${elm.user_id}`);

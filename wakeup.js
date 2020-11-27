@@ -13,11 +13,11 @@ function wakeup() {
   // const URL = `http://127.0.0.1:80/`;
   axios.get(URL).then(function (response) {
     // handle success
-    console.log(`wakeup.js wakeup success\n${response}`);
+    console.log(`wakeup.js wakeup success: ${response.data}`);
   })
     .catch(function (error) {
       // handle error
-      console.log(`wakeup.js wakeup error\n${error}`);
+      console.log(`wakeup.js wakeup error: ${error}`);
     })
     .then(function () {
       // always executed
