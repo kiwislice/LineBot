@@ -71,6 +71,7 @@ const GET_ALL_STORE = gql`
       name
       url
       score
+      score_count
     }
   }
 `;
@@ -179,7 +180,7 @@ module.exports = {
     if (n >= stores.length)
       return stores;
 
-    var scores = stores.map(x => x.score);
+    var scores = stores.map(x => Math.round((x.score - 3) * x.score_count));
     var index = random(scores, n);
     var rtn = [];
     index.forEach(i => rtn.push(stores[i]));
@@ -187,5 +188,7 @@ module.exports = {
   },
 
 };
+
+
 
 
