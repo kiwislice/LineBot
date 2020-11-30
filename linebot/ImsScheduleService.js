@@ -8,13 +8,13 @@ const axios = require("axios");
 var cache = {};
 
 const JOB_SETTING = "00 10 24-31 * 1-5";
-//  const JOB_SETTING = "*/1 * * * *";
+//const JOB_SETTING = "*/1 * * * *";
 
 // 啟動時自動觸發排程
 repository.getSubscribedUserId({ service_id: SERVICE_ID }, (response) => {
   var list = response.data.data.linebot_subscribed;
   list.forEach((elm) => {
-    cache[elm.user_id] = ImsSchedule(elm.user_id);
+   cache[elm.user_id] = ImsSchedule(elm.user_id);
     console.log(`ImsScheduleService add cache ${elm.user_id}`);
   });
 });
@@ -27,25 +27,22 @@ service.handle = async function (cmd, event) {
       service_id: SERVICE_ID,
       user_id: sourceId,
     });
-    cache[sourceId] = function () {
-      event.reply(`已啟動IMS回報`);
-      ImsSchedule(sourceId);
-    };
-    cache[sourceId]();
+    event.reply(`已啟動IMS回報`);
+    cache[sourceId] = ImsSchedule(sourceId);
     return true;
   } else if (cmd === "關閉IMS回報") {
     repository.deleteSubscribedUserId({
       service_id: SERVICE_ID,
       user_id: sourceId,
     });
-    cache[sourceId] = function () { };
+    cache[sourceId].cancel();
     event.reply(`已關閉IMS回報`);
     return true;
   }
   return false;
 };
 function ImsSchedule(sourceId){
-  schedule.scheduleJob(JOB_SETTING, function () {
+ return schedule.scheduleJob(JOB_SETTING, function () {
     console.log(`schedule run ${SERVICE_ID}`);
     var date = new Date();
     var today = new Date(date.getFullYear(), date.getMonth() + 1, 0);
