@@ -48,9 +48,9 @@ var botProxy = {
   bots: bots,
   // push時就是全部bot都推
   push: function (to, msg) {
+    LineNotifyService.sendNotifyToDev(`${bots[0].linewebhookPath} push ${JSON.stringify(msg)}`);
     bots.forEach(bot => {
       bot.push(to, msg);
-      LineNotifyService.sendNotifyToDev(`${bot.linewebhookPath} push ${JSON.stringify(msg)}`);
     });
   },
 };
