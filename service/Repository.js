@@ -66,7 +66,7 @@ const GET_USER_BY_ID = gql`
 
 const GET_ALL_STORE = gql`
   query allStore {
-    store(order_by: {score: desc, id: desc}) {
+    store(order_by: {id: desc}) {
       id
       name
       url
@@ -99,7 +99,12 @@ function array0toN(n) {
   return Array.from(Array(n + 1).keys());
 }
 
-// 從權重陣列抽取n個位置，權重影響機率，回傳位置陣列，取後不放回，權重可負數
+/**
+ * 從權重陣列抽取n個位置，權重影響機率，回傳位置陣列，取後不放回，權重可負數
+ * @param {Array<number>} weights 整數權重陣列
+ * @param {number} n 
+ * @returns {Array<number>} 抽出的index陣列
+ */
 function random(weights, n) {
   if (n <= 0)
     return [];
@@ -166,7 +171,7 @@ module.exports = {
     await postDb(GET_ALL_STORE, null, (response) => stores = response.data.data.store);
     return stores;
   },
-  // 隨機抽n間店家，以分數為權重
+  /**隨機抽n間店家，以分數為權重 */
   randomStores: async function (n) {
     var stores = await this.getAllStores();
     if (n <= 0)
