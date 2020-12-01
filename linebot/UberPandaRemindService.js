@@ -116,15 +116,12 @@ async function startVote(sourceId, bot) {
 
     var endTime = new Date(Date.now() + WAIT_VOTE_MS);
     var voteMsg = `請使用"/序號"投票，範例/1。\n投票將於${tools.toHMS(endTime)}結束。\n輸入"重抽"可刷新店家清單\n`;
-    var uberPandaLink = [{
-        type: "button",
-        // style: "primary",
-        action: {
-            type: "uri",
-            label: `UberPanda所有店家清單`,
-            uri: `https://kiwislice.github.io/UberPanda/#/`,
-        },
-    }];
+    var uberPandaLink = [
+        card.fmo_button(card.ao_uri(`https://kiwislice.github.io/UberPanda/#/`, `UberPanda所有店家清單`), {
+            style: 'secondary',
+            color: '#f9e9cdFF',
+        }),
+    ];
 
     cache[sourceId].stores = await repository.randomStores(RANDOM_STORE_COUNT);
     cache[sourceId].stores.forEach(elm => elm.vote = 0);

@@ -210,52 +210,6 @@ function asMenu(labels = [], cols = 2) {
 }
 
 
-
-
-function getRendomCard(msg) {
-  var obj = {
-    type: "flex",
-    altText: "今日UberPanda餐廳推薦!",
-    contents: {
-      type: "bubble",
-      body: {
-        type: "box",
-        layout: "vertical",
-        spacing: "md",
-        contents: [
-          {
-            type: "image",
-            url:
-              "https://vos.line-scdn.net/bot-designer-template-images/event/brown-card.png",
-            size: "xl",
-          },
-          {
-            type: "text",
-            text: "UberPanda",
-            wrap: true,
-            size: "xl",
-            weight: "bold",
-            align: "center",
-            color: "#000000",
-          },
-          {
-            type: "text",
-            text: msg || "今日午餐-餐廳推薦!",
-            wrap: true,
-            size: "md",
-            align: "center",
-            color: "#000000",
-          },
-        ],
-      },
-    },
-  };
-  return obj;
-}
-
-
-
-
 /**空氣品質card的一行資料 */
 function getAqiCardText(text) {
   return fmo_text(text, {
@@ -350,24 +304,40 @@ function getAqiCard(data) {
  * @param {array} afterStore 插入在店家清單之後的json物件
  */
 function getRestaurantButton(stores, msg, afterMsg = [], afterStore = []) {
-  var obj = getRendomCard(msg);
-  afterMsg.forEach((element, index) => {
-    obj.contents.body.contents.push(element);
+  // <a href='https://www.freepik.com/photos/food'>Food photo created by timolina - www.freepik.com</a>
+  const bannerLink = "https://image.freepik.com/free-photo/chicken-wings-barbecue-sweetly-sour-sauce-picnic-summer-menu-tasty-food-top-view-flat-lay_2829-6470.jpg";
+  var hero = fmo_image(bannerLink, { aspectRatio: '60:23' });
+  const contentsOptions = { hero: hero };
+
+  var storesObj = stores.map((store, index) => {
+    var action = ao_uri(store.url, `${index + 1}. ${store.name}`);
+    return fmo_button(action, {
+      style: 'secondary',
+      color: '#f09c5aFF',
+    });
   });
-  stores.forEach((element, index) =>
-    obj.contents.body.contents.push({
-      type: "button",
-      style: "primary",
-      action: {
-        type: "uri",
-        label: `${index + 1}. ${element.name}`,
-        uri: element.url,
-      },
-    })
+
+  var obj = flexBubble(`今日UberPanda餐廳推薦!`,
+    vBox([
+      fmo_text(`UberPanda`, {
+        wrap: true,
+        size: "xl",
+        weight: "bold",
+        align: "center",
+        color: "#000000",
+      }),
+      fmo_text(msg || `今日午餐-餐廳推薦!`, {
+        wrap: true,
+        size: "md",
+        align: "center",
+        color: "#000000",
+      }),
+      ...afterMsg,
+      ...storesObj,
+      ...afterStore,
+    ], { spacing: "md" }),
+    { contentsOptions: contentsOptions },
   );
-  afterStore.forEach((element, index) => {
-    obj.contents.body.contents.push(element);
-  });
   return obj;
 }
 
@@ -377,7 +347,7 @@ function getRestaurantButton(stores, msg, afterMsg = [], afterStore = []) {
 module.exports = {
   mo_sticker, mo_image, fmo_image, fmo_text,
   fmo_button, flexBubble, vBox, hBox,
-  ao_message, ao_uri, getRendomCard,
+  ao_message, ao_uri,
   getAqiCardText, getAqiCard, getRestaurantButton, asMenu,
 };
 
