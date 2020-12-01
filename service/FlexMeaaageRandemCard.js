@@ -271,7 +271,7 @@ function getAqiCard(data) {
   const defineAction = ao_uri(`https://airtw.epa.gov.tw/CHT/Information/Standard/AirQualityIndicator.aspx`, `各項指標定義請按此`);
   const webAction = ao_uri(`https://airtw.epa.gov.tw/CHT/Default.aspx`);
 
-  var btns = ['雷達回波', '空氣品質', '天氣警特報'].map(s => fmo_button(ao_message(s), {
+  var btns = ['雷達回波', '空氣品質', '氣象觀測', '天氣警特報'].map(s => fmo_button(ao_message(s), {
     color: '#7BA23FFF',
     height: 'sm',
     style: 'primary',
