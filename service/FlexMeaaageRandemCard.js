@@ -49,6 +49,21 @@ function fmo_image(url, options) {
 }
 
 /**
+ * 產生icon訊息物件
+ * @param {string} url 
+ * @param {object} options 額外參數
+ */
+function fmo_icon(url, options) {
+  var o = {
+    type: "icon",
+    url: url,
+    size: "lg",
+    ...options
+  };
+  return o;
+}
+
+/**
  * 產生文字訊息物件
  * @param {string} text 
  * @param {object} options 額外參數
@@ -309,11 +324,32 @@ function getRestaurantButton(stores, msg, afterMsg = [], afterStore = []) {
   var hero = fmo_image(bannerLink, { aspectRatio: '60:23' });
   const contentsOptions = { hero: hero };
 
+  const uberIcon = "https://d3i4yxtzktqr9n.cloudfront.net/web-eats-v2/112ff5fdd1f8930464dcb71900faa42c.png";
+  const pandaIcon = "https://assets.foodora.com/5e961f5/img/favicon/foodpanda/favicon-32x32.png?5e961f5";
+
   var storesObj = stores.map((store, index) => {
     var action = ao_uri(store.url, `${index + 1}. ${store.name}`);
-    return fmo_button(action, {
-      style: 'secondary',
-      color: '#f09c5aFF',
+    var text = fmo_text(`${index + 1}. ${store.name}`, {
+      gravity: 'center',
+      size : 'lg',
+      wrap: false,
+    });
+    var iconUrl = store.url.includes('https://www.ubereats.com/') ? uberIcon : pandaIcon;
+    var img = fmo_image(iconUrl,
+      {
+        aspectRatio: '1:1',
+        size: '30px',
+        flex: 0,
+        gravity: 'center',
+        margin: 'xs',
+      });
+
+    return hBox([img, text], {
+      spacing: "xs",
+      backgroundColor: '#f09c5aFF',
+      cornerRadius: 'md',
+      action: action,
+      height: '50px',
     });
   });
 
@@ -335,8 +371,11 @@ function getRestaurantButton(stores, msg, afterMsg = [], afterStore = []) {
       ...afterMsg,
       ...storesObj,
       ...afterStore,
-    ], { spacing: "md" }),
-    { contentsOptions: contentsOptions },
+    ], { spacing: "sm" }),
+    {
+      contentsOptions: contentsOptions,
+      flexOptions: { /*size: 'nano'*/ },
+    },
   );
   return obj;
 }
@@ -345,7 +384,7 @@ function getRestaurantButton(stores, msg, afterMsg = [], afterStore = []) {
 
 
 module.exports = {
-  mo_sticker, mo_image, fmo_image, fmo_text,
+  mo_sticker, mo_image, fmo_image, fmo_text, fmo_icon,
   fmo_button, flexBubble, vBox, hBox,
   ao_message, ao_uri,
   getAqiCardText, getAqiCard, getRestaurantButton, asMenu,
