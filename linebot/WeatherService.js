@@ -34,57 +34,92 @@ const Authorization = 'CWB-F1BC2EA4-B244-4E4A-B76C-3745648324B1';
  * 天氣特報-各別縣市地區目前之天氣警特報情形
  * 災害性天氣特報資料(含豪(大)雨特報、低溫特報、陸上強風特報、濃霧特報、即時天氣訊息)
  * https://opendata.cwb.gov.tw/dataset/warning/W-C0033-001
+ * @param {string} locationName 縣市名
  */
-async function getWC0033001Data() {
+async function getWC0033001Data(locationName = '高雄市') {
   const API_URL = `https://opendata.cwb.gov.tw/fileapi/v1/opendataapi/W-C0033-001?Authorization=${Authorization}&downloadType=WEB&format=JSON`;
   var data = {};
   await axios.get(API_URL).then(function (response) {
     try {
+      // 縣市
+      data.locationName = locationName;
       // 發布時間
       data.sent = new Date(response.data.cwbopendata.sent);
-      var kao = response.data.cwbopendata.dataset.location.filter(x => x.locationName == '高雄市')[0];
-      // console.log(kao);
+      var kao = response.data.cwbopendata.dataset.location.filter(x => x.locationName == locationName)[0];
       kao = kao.hazardConditions.hazards;
-      // console.log(kao);
-      data.info = kao.info.phenomena + kao.info.significance;
-      data.startTime = new Date(kao.validTime.startTime);
-      data.endTime = new Date(kao.validTime.endTime);
-      data.affectedAreas = kao.hazard.info.affectedAreas.location.map(x => x.locationName);
+
+      var resolveHazardFunc = function (hazard) {
+        var rtn = {};
+        rtn.info = hazard.info.phenomena + hazard.info.significance;
+        rtn.startTime = new Date(hazard.validTime.startTime);
+        rtn.endTime = new Date(hazard.validTime.endTime);
+        if (hazard.hazard) {
+          var affectedAreas = hazard.hazard.info.affectedAreas;
+          if (Array.isArray(affectedAreas)) {
+            rtn.affectedAreas = affectedAreas.map(x => x.locationName).join();
+          } else {
+            rtn.affectedAreas = affectedAreas.location.locationName;
+          }
+        }
+        return rtn;
+      };
+
+      if (Array.isArray(kao)) {
+        data.hazards = kao.map(x => resolveHazardFunc(x));
+      } else {
+        data.hazards = [resolveHazardFunc(kao)];
+      }
     } catch (e) {
       data = null;
     }
     // {
-    //     "geocode": "10002",
-    //     "hazardConditions": {
-    //         "hazards": {
-    //             "hazard": {
-    //                 "info": {
-    //                     "affectedAreas": {
-    //                         "location": [
-    //                             {
-    //                                 "locationName": "山區"
-    //                             },
-    //                             {
-    //                                 "locationName": "平地"
-    //                             }
-    //                         ]
-    //                     },
-    //                     "language": "zh-TW",
-    //                     "phenomena": "大雨"
-    //                 }
+    //   "geocode": "10017",
+    //   "hazardConditions":
+    //   {
+    //     "hazards": [
+    //       {
+    //         "hazard":
+    //         {
+    //           "info":
+    //           {
+    //             "affectedAreas":
+    //             {
+    //               "location":
+    //               {
+    //                 "locationName": "基隆北海岸"
+    //               }
     //             },
-    //             "info": {
-    //                 "language": "zh-TW",
-    //                 "phenomena": "大雨",
-    //                 "significance": "特報"
-    //             },
-    //             "validTime": {
-    //                 "endTime": "2020-11-24T11:00:00+08:00",
-    //                 "startTime": "2020-11-24T04:16:00+08:00"
-    //             }
+    //             "language": "zh-TW",
+    //             "phenomena": "大雨"
+    //           }
+    //         },
+    //         "info":
+    //         {
+    //           "language": "zh-TW",
+    //           "phenomena": "大雨",
+    //           "significance": "特報"
+    //         },
+    //         "validTime":
+    //         {
+    //           "endTime": "2020-12-04T11:00:00+08:00",
+    //           "startTime": "2020-12-03T09:59:00+08:00"
     //         }
-    //     },
-    //     "locationName": "宜蘭縣"
+    //       },
+    //       {
+    //         "info":
+    //         {
+    //           "language": "zh-TW",
+    //           "phenomena": "陸上強風",
+    //           "significance": "特報"
+    //         },
+    //         "validTime":
+    //         {
+    //           "endTime": "2020-12-06T17:00:00+08:00",
+    //           "startTime": "2020-12-03T10:01:00+08:00"
+    //         }
+    //       }]
+    //   },
+    //   "locationName": "基隆市"
     // },
   });
   return data;
@@ -277,11 +312,17 @@ function toMsg(data) {
   if (data == null)
     return '高雄市目前無天氣警特報';
 
-  var msg = `高雄市${data.info}\n`;
-  msg += `發布時間：${tools.toYMDHMS(data.sent)}\n`;
-  msg += `開始時間：${tools.toYMDHMS(data.startTime)}\n`;
-  msg += `結束時間：${tools.toYMDHMS(data.endTime)}\n`;
-  msg += `影響範圍：${data.affectedAreas}\n`;
+  var msg = `${data.locationName}天氣警特報\n`;
+  msg += `發布時間：${tools.toYMDHMS(data.sent)}\n\n`;
+  data.hazards.forEach(x => {
+    msg += `${x.info}\n`;
+    msg += `開始時間：${tools.toYMDHMS(x.startTime)}\n`;
+    msg += `結束時間：${tools.toYMDHMS(x.endTime)}\n`;
+    if (x.affectedAreas) {
+      msg += `影響範圍：${x.affectedAreas}\n`;
+    }
+    msg += '\n';
+  });
   // {
   //   "sent": "2020-11-24T04:21:48+08:00",
   //   "info": "大雨特報",
@@ -382,8 +423,9 @@ service.handle = async function (cmd, event) {
     cache[sourceId] = null;
     event.reply(`已關閉天氣警特報通知`);
     return true;
-  } else if (cmd === "天氣警特報") {
-    var data = await getWC0033001Data();
+  } else if (cmd.startsWith("天氣警特報")) {
+    var location = cmd.match(/天氣警特報(:(.*))?/)[2];
+    var data = location ? await getWC0033001Data(location) : await getWC0033001Data();
     event.reply(toMsg(data));
     return true;
   } else if (cmd === "雷達回波") {
