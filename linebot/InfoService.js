@@ -2,6 +2,7 @@
 
 // bot狀態相關服務
 
+const SERVICE_ID = `InfoService`;
 var service = { bot: null };
 
 
