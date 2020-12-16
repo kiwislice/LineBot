@@ -27,9 +27,11 @@ const RANDOM_STORE_COUNT = 3;
 // const WAIT_SIGN_UP_MS = 30 * 1000;
 // const WAIT_VOTE_MS = 20 * 1000;
 
-const MSG = `今天要訂外送嗎？
+const MSG = `今天要訂外送🍱嗎？
 想訂的人請在10:30之前喊+1，不足${PEOPLE_LOWER_BOUND}人就不訂了哦～
-https://kiwislice.github.io/UberPanda/#/`;
+https://kiwislice.github.io/UberPanda/#/
+
+📢店家的分數會影響隨機抽選的機率，請大家踴躍給予評分！`;
 
 // 啟動時自動觸發排程
 repository.getSubscribedUserId({ service_id: SERVICE_ID }, (response) => {
@@ -135,7 +137,7 @@ async function startVote(sourceId, bot) {
             cache[sourceId].stores[index].vote++;
         }
         cache[sourceId].stores.sort((a, b) => b.vote - a.vote);
-        var msg = '公布投票結果，本次前3名為：\n';
+        var msg = '🏆公布投票結果，本次前3名為：\n';
         for (var i = 0; i < 3; i++) {
             msg += `第${i + 1}名. ${cache[sourceId].stores[i].name}(${cache[sourceId].stores[i].vote}票)\n`;
         }

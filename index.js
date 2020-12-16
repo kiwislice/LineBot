@@ -38,7 +38,7 @@ const CookieFilter = require('./web/CookieFilter');
 const CrosFilter = require('./web/CrosFilter');
 const HomeRouter = require('./web/HomeRouter');
 const AuthRouter = require('./web/AuthRouter');
-
+const UberPandaDataCacheRouter = require('./web/UberPandaDataCacheRouter');
 
 
 
@@ -53,6 +53,7 @@ app.use(urlencodedParser);
 // 額外加上根目錄的GET
 app.use("/", /*CookieFilter,*/ CrosFilter, HomeRouter);
 app.use(PrintRequestFilter, CrosFilter, AuthRouter);
+// app.use(PrintRequestFilter, CrosFilter, UberPandaDataCacheRouter);
 
 // app.use(PrintRequestFilter, LineNotifyRouter);
 

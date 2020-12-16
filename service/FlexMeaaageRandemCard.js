@@ -237,9 +237,11 @@ function getAqiCardText(text) {
 
 /**空氣品質card */
 function getAqiCard(data) {
+  // 定義Action
   const defineAction = ao_uri(`https://airtw.epa.gov.tw/CHT/Information/Standard/AirQualityIndicator.aspx`, `各項指標定義請按此`);
   const webAction = ao_uri(`https://airtw.epa.gov.tw/CHT/Default.aspx`);
 
+  // FOOTER區
   var btns = ['雷達回波', '空氣品質', '氣象觀測', '天氣警特報'].map(s => fmo_button(ao_message(s), {
     color: '#7BA23FFF',
     height: 'sm',
@@ -252,7 +254,7 @@ function getAqiCard(data) {
   });
   footer.contents.unshift(fmo_text('以下為可點選的其他資訊', { align: 'center' }));
 
-  const contentsOptions = { action: webAction, footer: footer };
+  const contentsOptions = { footer: footer };
 
 
   /**
@@ -273,6 +275,7 @@ function getAqiCard(data) {
     vBox([
       fmo_image("https://airtw.epa.gov.tw/images/logo.svg", {
         aspectRatio: "4:1",
+        action: webAction,
       }),
       fmo_text(`${data.SiteName}站空氣品質\n即時監測資料`, {
         wrap: true,
@@ -280,12 +283,14 @@ function getAqiCard(data) {
         weight: "bold",
         align: "center",
         color: "#000000",
+        action: webAction,
       }),
       fmo_text(`資料時間：\n${data.PublishTime}`, {
         wrap: true,
         size: "md",
         align: "center",
         color: "#000000",
+        action: webAction,
       }),
       getAqiCardText(`空氣品質指標 AQI：${data.AQI}`),
       getAqiCardText(`${data.Status}`),
@@ -331,7 +336,7 @@ function getRestaurantButton(stores, msg, afterMsg = [], afterStore = []) {
     var action = ao_uri(store.url, `${index + 1}. ${store.name}`);
     var text = fmo_text(`${index + 1}. ${store.name}`, {
       gravity: 'center',
-      size : 'lg',
+      size: 'lg',
       wrap: false,
     });
     var iconUrl = store.url.includes('https://www.ubereats.com/') ? uberIcon : pandaIcon;

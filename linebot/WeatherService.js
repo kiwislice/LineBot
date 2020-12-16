@@ -385,7 +385,7 @@ function 風向(ang) {
 
 /**getOA0001001Data資料轉訊息 */
 function toMsg_OA0001001(data) {
-  var msg = `三民自動氣象站觀測資料\n`;
+  var msg = `🌤三民自動氣象站觀測資料\n`;
   msg += `觀測時間：${tools.toYMDHMS(data.obsTime)}\n`;
   msg += `溫度：${data.TEMP}°C\n`;
   msg += `風向：${風向(data.WDIR)}\n`;
