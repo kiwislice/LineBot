@@ -5,73 +5,52 @@ var router = require('express').Router();
 const repository = require('../service/Repository');
 const PATH = '/uberPandaData';
 
-var needUpdate = true;
 var allStores = null;
+var oneStoreScore = {};
+
 
 router.get(PATH + '/getAllStores', async function (req, res, next) {
     console.log(`${SERVICE_ID} filter`);
 
-    if (!allStores) {
+    if (allStores == null) {
         allStores = await repository.getAllStores();
-        lastUpdate = Date.now();
     }
+    console.log(allStores);
     res.send(allStores);
 
     console.log(`${SERVICE_ID} filter end`);
 });
 
-router.post(PATH + '/createStore', async function (req, res, next) {
+router.post(PATH + '/getOneStoreScore', async function (req, res, next) {
     console.log(`${SERVICE_ID} filter`);
 
-    var name = req.body.name;
-    var uid = null;
-    var success = false;
-    if (!allStores) {
-        allStores = await repository.getAllStores();
-        lastUpdate = Date.now();
+    let key = req.body.store_id + '__' + req.body.user_id;
+    if (!oneStoreScore[key]) {
+        oneStoreScore[key] = await repository.getOneStoreScore(req.body);
     }
-    res.send(allStores);
+    res.send(oneStoreScore[key]);
 
     console.log(`${SERVICE_ID} filter end`);
 });
 
+router.post(PATH + '/createStore', function (req, res, next) {
+    console.log(`${SERVICE_ID} filter`);
 
+    allStores = null;
+    res.send('ok');
 
-
-
-
-router.options(PATH + '/createStore', function (req, res, next) {
-    next();
+    console.log(`${SERVICE_ID} filter end`);
 });
 
-// router.post('/auth/login', function (req, res, next) {
-//     console.log(`${SERVICE_ID} filter`);
+router.post(PATH + '/saveStoreScore', function (req, res, next) {
+    console.log(`${SERVICE_ID} filter`);
 
-//     var name = req.body.name;
-//     var uid = null;
-//     var success = false;
-//     if (name) {
-//         uid = uuidv4();
-//         repository.createUser({ id: uid, name: name });
-//         success = true;
-//     }
-//     res.send({ success: success, uid: uid });
+    let key = req.body.store_id + '__' + req.body.user_id;
+    delete oneStoreScore[key];
+    res.send('ok');
 
-//     console.log(`${SERVICE_ID} filter end`);
-//     next();
-// });
+    console.log(`${SERVICE_ID} filter end`);
+});
 
-// router.get('/auth/isAuthenticated/:uid', async function (req, res, next) {
-//     console.log(`${SERVICE_ID} filter`);
-
-//     var rtn = { isAuthenticated: false, uid: req.params.uid };
-//     if (req.params.uid) {
-//         var user = await repository.getUserById(req.params.uid);
-//         rtn.isAuthenticated = !!user;
-//     }
-//     res.send(rtn);
-
-//     console.log(`${SERVICE_ID} filter end`);
-// });
 
 module.exports = router;
