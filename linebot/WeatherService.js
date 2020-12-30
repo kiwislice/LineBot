@@ -9,6 +9,7 @@ const axios = require('axios');
 const flex = require('../service/FlexMeaaageRandemCard');
 
 var cache = {};
+var 天氣警特報lastPushMsg = {};
 const JOB_SETTING = '0 15,45 7-17 * * 1-5';
 // const JOB_SETTING = '0 * * * * 1-5';
 
@@ -20,7 +21,11 @@ repository.getSubscribedUserId({ service_id: SERVICE_ID }, (response) => {
       console.log(`schedule run ${SERVICE_ID}`);
       var data = await getWC0033001Data();
       if (data) {
-        service.bot.push(elm.user_id, toMsg(data));
+        var msg = toMsg(data);
+        if (msg != 天氣警特報lastPushMsg[elm.user_id]) {
+          service.bot.push(elm.user_id, msg);
+          天氣警特報lastPushMsg[elm.user_id] = msg;
+        }
       }
     });
     console.log(`${SERVICE_ID} add cache ${elm.user_id}`);
