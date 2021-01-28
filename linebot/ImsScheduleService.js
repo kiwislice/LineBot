@@ -46,7 +46,8 @@ function ImsSchedule(sourceId){
     console.log(`schedule run ${SERVICE_ID}`);
     var date = new Date();
     var today = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-    var lastWeekDay = today.getDate() - today.getDay() + 1;
+    // var lastWeekDay = today.getDate() - today.getDay() + 1;
+    var lastWeekDay = today.getDate() - (today.getDay() == 0 ? 7 : today.getDay() - 1);
     if (lastWeekDay <= date.getDate()) {
       service.bot.push(
         sourceId,

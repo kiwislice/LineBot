@@ -15,7 +15,7 @@ router.get(PATH + '/getAllStores', async function (req, res, next) {
     if (allStores == null) {
         allStores = await repository.getAllStores();
     }
-    console.log(allStores);
+    // console.log(allStores);
     res.send(allStores);
 
     console.log(`${SERVICE_ID} filter end`);

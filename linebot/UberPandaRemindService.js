@@ -18,7 +18,7 @@ const PEOPLE_LOWER_BOUND = 3;
 /**等待報名時間 */
 const WAIT_SIGN_UP_MS = 30 * 60 * 1000;
 /**等待投票時間 */
-const WAIT_VOTE_MS = 20 * 60 * 1000;
+const WAIT_VOTE_MS = 15 * 60 * 1000;
 /**隨機抽選店家數量*/
 const RANDOM_STORE_COUNT = 3;
 
