@@ -27,11 +27,13 @@ const RANDOM_STORE_COUNT = 3;
 // const WAIT_SIGN_UP_MS = 30 * 1000;
 // const WAIT_VOTE_MS = 20 * 1000;
 
-const MSG = `今天要訂外送🍱嗎？
-想訂的人請在10:30之前喊+1，不足${PEOPLE_LOWER_BOUND}人就不訂了哦～
-https://kiwislice.github.io/UberPanda/#/
+// const MSG = `今天要訂外送🍱嗎？
+// 想訂的人請在10:30之前喊+1，不足${PEOPLE_LOWER_BOUND}人就不訂了哦～
+// https://kiwislice.github.io/UberPanda/#/
 
-📢店家的分數會影響隨機抽選的機率，請大家踴躍給予評分！`;
+// 📢店家的分數會影響隨機抽選的機率，請大家踴躍給予評分！`;
+
+const MSG = `📢現在時間上午10點整，今天要訂外送嗎？🤔`;
 
 // 啟動時自動觸發排程
 repository.getSubscribedUserId({ service_id: SERVICE_ID }, (response) => {
@@ -62,13 +64,13 @@ function startRemind(sourceId, bot) {
 
     bot.push(sourceId, MSG);
     cache[sourceId] = Object.assign({}, CACHE_DATA_OBJ);
-    cache[sourceId].onSignUp = true;
-    cache[sourceId].timeout = setTimeout(() => {
-        cache[sourceId].onSignUp = false;
-        var count = getCount(sourceId);
-        var submsg = count < PEOPLE_LOWER_BOUND ? '今天不訂餐' : '快決定店家點餐吧';
-        bot.push(sourceId, `統計人數共${count}人，${submsg}`);
-    }, WAIT_SIGN_UP_MS);
+    // cache[sourceId].onSignUp = true;
+    // cache[sourceId].timeout = setTimeout(() => {
+    //     cache[sourceId].onSignUp = false;
+    //     var count = getCount(sourceId);
+    //     var submsg = count < PEOPLE_LOWER_BOUND ? '今天不訂餐' : '快決定店家點餐吧';
+    //     bot.push(sourceId, `統計人數共${count}人，${submsg}`);
+    // }, WAIT_SIGN_UP_MS);
 }
 
 /**取得+1數量 */
