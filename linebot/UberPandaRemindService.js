@@ -41,7 +41,7 @@ repository.getSubscribedUserId({ service_id: SERVICE_ID }, (response) => {
     list.forEach((elm) => {
         jobs[elm.user_id] = schedule.scheduleJob(JOB_SETTING, function () {
             console.log(`schedule run ${SERVICE_ID}`);
-            startRemind(elm.user_id, service.bot);
+            // startRemind(elm.user_id, service.bot);
         });
         console.log(`${SERVICE_ID} add cache ${elm.user_id}`);
     });
