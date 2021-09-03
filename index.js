@@ -67,14 +67,4 @@ app.listen(port, () => {
 const wakeup = require('./wakeup');
 
 
-// cors-anywhere
-var cors_proxy = require('cors-anywhere');
-cors_proxy.createServer({
-  originWhitelist: [], // Allow all origins
-  requireHeader: [],//['origin', 'x-requested-with'],
-  removeHeaders: ['cookie', 'cookie2']
-}).listen(8080, '0.0.0.0', function () {
-  console.log('Running CORS Anywhere on /cors-anywhere');
-});
-
 
